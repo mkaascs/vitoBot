@@ -12,7 +12,14 @@ internal class Program {
         IMessageService messageService
             = new MessageService(new HttpClient(), apiConfiguration);
 
-        Message? message = await messageService.GetRandomMessage(200);
-        Console.WriteLine(message?.Content);
+        Response<bool> response =
+            await messageService.AddNewMessage(200, new Message("маме свой расскажешь", ContentType.Text));
+
+        Console.WriteLine($"{response.StatusCode} - {response.Content}");
+        
+        Response<Message> message =
+            await messageService.GetRandomMessage(200);
+        
+        Console.WriteLine($"{message.StatusCode} - {message.Content?.Content} - {message.Content?.Type}");
     }
 }

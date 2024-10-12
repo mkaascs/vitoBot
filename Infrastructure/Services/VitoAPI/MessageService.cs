@@ -1,38 +1,42 @@
-using System.Net;
-using Newtonsoft.Json;
-
 using Domain.Abstractions;
 using Domain.API;
 
 using Infrastructure.Configuration;
+using Infrastructure.Services.VitoAPI.Extensions;
 
 namespace Infrastructure.Services.VitoAPI;
 
 public class MessageService(HttpClient httpClient, VitoApiConfiguration configuration) : IMessageService {
-    public async Task<IEnumerable<Message>?> GetMessages(ulong chatId, CancellationToken cancellationToken=default) {
-        HttpResponseMessage responseMessage = await httpClient
-            .GetAsync($"{configuration.DomainName}/chats/{chatId}", cancellationToken);
+    public async Task<Response<bool>> AddNewMessage(ulong chatId, Message message,
+        CancellationToken cancellationToken = default) 
+        => await httpClient.PostAsync<Message>(
+            CombinePath($"chats/{chatId}"),
+            message,
+            cancellationToken);
 
-        if (responseMessage.StatusCode != HttpStatusCode.OK)
-            return null;
+    public async Task<Response<IEnumerable<Message>>> GetMessages(ulong chatId,
+        CancellationToken cancellationToken = default)
+        => await httpClient.GetAsync<IEnumerable<Message>>(
+            CombinePath($"chats/{chatId}"),
+            cancellationToken);
 
-        IEnumerable<Message>? messages =
-            JsonConvert.DeserializeObject<IEnumerable<Message>>
-                (await responseMessage.Content.ReadAsStringAsync(cancellationToken));
+    public async Task<Response<IEnumerable<Message>>> GetMessages(ulong chatId, ContentType type,
+        CancellationToken cancellationToken = default)
+        => await httpClient.GetAsync<IEnumerable<Message>>(
+            CombinePath($"chats/{chatId}/{type}"),
+            cancellationToken);
 
-        return messages;
-    }
+    public async Task<Response<Message>> GetRandomMessage(ulong chatId, CancellationToken cancellationToken = default)
+        => await httpClient.GetAsync<Message>(
+            CombinePath($"chats/{chatId}/random"),
+            cancellationToken);
+    
+    public async Task<Response<Message>> GetRandomMessage(ulong chatId, ContentType type,
+        CancellationToken cancellationToken = default)
+        => await httpClient.GetAsync<Message>(
+            CombinePath($"chats/{chatId}/{type}/random"),
+            cancellationToken);
 
-    public async Task<Message?> GetRandomMessage(ulong chatId, CancellationToken cancellationToken=default) {
-        HttpResponseMessage responseMessage = await httpClient
-            .GetAsync($"{configuration.DomainName}/chats/{chatId}/random", cancellationToken);
-
-        if (responseMessage.StatusCode != HttpStatusCode.OK)
-            return null;
-
-        Message? message = JsonConvert.DeserializeObject<Message>(
-            await responseMessage.Content.ReadAsStringAsync(cancellationToken));
-
-        return message;
-    }
+    private string CombinePath(string relativeApiPath)
+        => Path.Combine(configuration.DomainName, relativeApiPath);
 }
