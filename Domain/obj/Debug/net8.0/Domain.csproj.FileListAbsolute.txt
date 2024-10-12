@@ -1,0 +1,12 @@
+/Users/makaasz/Проекты/vitoBot/VitoBot/Domain/bin/Debug/net8.0/Domain.deps.json
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/bin/Debug/net8.0/Domain.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/bin/Debug/net8.0/Domain.pdb
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.AssemblyInfoInputs.cache
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.AssemblyInfo.cs
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.csproj.CoreCompileInputs.cache
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.sourcelink.json
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/refint/Domain.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Domain/obj/Debug/net8.0/Domain.pdb
+/Users/makaasz/Проекты/vitoBot/VitoBot/Domain/obj/Debug/net8.0/ref/Domain.dll
