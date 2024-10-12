@@ -1,5 +1,5 @@
 using System.Net;
-using Domain.API;
+using Domain.VitoAPI;
 using Newtonsoft.Json;
 
 namespace Infrastructure.Services.VitoAPI.Extensions;

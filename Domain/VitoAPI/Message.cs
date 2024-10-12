@@ -1,4 +1,4 @@
-namespace Domain.API;
+namespace Domain.VitoAPI;
 
 public record Message(
     string Content, 

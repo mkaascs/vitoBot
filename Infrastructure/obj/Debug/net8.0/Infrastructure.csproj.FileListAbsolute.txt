@@ -14,3 +14,5 @@
 /Users/makaasz/Проекты/vitoBot/vitoBot/Infrastructure/obj/Debug/net8.0/refint/Infrastructure.dll
 /Users/makaasz/Проекты/vitoBot/vitoBot/Infrastructure/obj/Debug/net8.0/Infrastructure.pdb
 /Users/makaasz/Проекты/vitoBot/VitoBot/Infrastructure/obj/Debug/net8.0/ref/Infrastructure.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Infrastructure/bin/Debug/net8.0/Application.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Infrastructure/bin/Debug/net8.0/Application.pdb

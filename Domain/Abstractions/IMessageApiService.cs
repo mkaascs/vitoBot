@@ -1,4 +1,4 @@
-using Domain.API;
+using Domain.VitoAPI;
 
 namespace Domain.Abstractions;
 

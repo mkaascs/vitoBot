@@ -1,0 +1,16 @@
+/Users/makaasz/Проекты/vitoBot/VitoBot/Application/bin/Debug/net8.0/Application.deps.json
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/bin/Debug/net8.0/Application.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/bin/Debug/net8.0/Application.pdb
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/bin/Debug/net8.0/Domain.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/bin/Debug/net8.0/Domain.pdb
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.csproj.AssemblyReference.cache
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.AssemblyInfoInputs.cache
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.AssemblyInfo.cs
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.csproj.CoreCompileInputs.cache
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.sourcelink.json
+/Users/makaasz/Проекты/vitoBot/VitoBot/Application/obj/Debug/net8.0/Applicat.44B5EDA2.Up2Date
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/refint/Application.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Application/obj/Debug/net8.0/Application.pdb
+/Users/makaasz/Проекты/vitoBot/VitoBot/Application/obj/Debug/net8.0/ref/Application.dll

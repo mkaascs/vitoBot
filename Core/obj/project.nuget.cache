@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "u6VcJ0jPZzBE/PMm4kgApDikRWph+vDnr4kUqERjB5KaFxh4F1JgOp0fjlFdq6PuTM49eMNkepsAlgtN1VJ09A==",
+  "dgSpecHash": "RdkUQd+FiTySdNrbEQUAJp6WBMAe78MB2xwR5BHcOfYmnFA0mDFuqZBfwTLDsoTXez/xhnzHoRq71//tya7FBw==",
   "success": true,
   "projectFilePath": "/Users/makaasz/Проекты/vitoBot/VitoBot/Core/Core.csproj",
   "expectedPackageFiles": [
-    "/Users/makaasz/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
+    "/Users/makaasz/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/telegram.bot/19.0.0/telegram.bot.19.0.0.nupkg.sha512"
   ],
   "logs": []
 }

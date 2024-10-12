@@ -1,5 +1,5 @@
-using Domain.API;
 using Domain.Abstractions;
+using Domain.VitoAPI;
 
 using Infrastructure.Configuration;
 using Infrastructure.Services.VitoAPI.Extensions;

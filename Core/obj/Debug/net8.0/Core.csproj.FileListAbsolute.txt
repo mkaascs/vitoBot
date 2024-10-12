@@ -20,3 +20,6 @@
 /Users/makaasz/Проекты/vitoBot/vitoBot/Core/obj/Debug/net8.0/Core.pdb
 /Users/makaasz/Проекты/vitoBot/VitoBot/Core/obj/Debug/net8.0/Core.genruntimeconfig.cache
 /Users/makaasz/Проекты/vitoBot/VitoBot/Core/obj/Debug/net8.0/ref/Core.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Telegram.Bot.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Application.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Application.pdb

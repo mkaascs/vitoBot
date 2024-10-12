@@ -1,4 +1,4 @@
-namespace Domain.API;
+namespace Domain.VitoAPI;
 
 public enum ContentType {
     Text,

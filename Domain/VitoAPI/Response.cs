@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace Domain.API;
+namespace Domain.VitoAPI;
 
 /// <summary>
 /// An instance of API response
