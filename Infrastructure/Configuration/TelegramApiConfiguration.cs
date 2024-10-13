@@ -8,5 +8,5 @@ public class TelegramApiConfiguration {
         ApiKey = apiKey;
     }
     
-    public string ApiKey { get; private set; }
+    public string ApiKey { get; set; }
 }

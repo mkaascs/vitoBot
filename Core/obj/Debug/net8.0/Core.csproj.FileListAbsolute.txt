@@ -23,3 +23,13 @@
 /Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Telegram.Bot.dll
 /Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Application.dll
 /Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Application.pdb
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.Configuration.FileExtensions.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Json.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Physical.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.FileSystemGlobbing.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Binder.dll
+/Users/makaasz/Проекты/vitoBot/vitoBot/Core/bin/Debug/net8.0/appsettings.json

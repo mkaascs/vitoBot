@@ -15,5 +15,5 @@ public class VitoApiConfiguration {
         };
     }
     
-    public string DomainName { get; private set; }
+    public string DomainName { get; set; }
 }
