@@ -1,22 +1,25 @@
-using Application.Abstractions;
+using Domain.VitoAPI;
 
+using Application.Abstractions;
 using Application.DTO;
 using Application.DTO.Commands;
 
 namespace Application.Services;
 
-public class MessageHandler(IMessageSender messageSender) : IMessageHandler {
-    public async Task OnGetMessageAsync(MessageDto message) {
+public class MessageHandler(MessageBotSavingLogic messageBotSaver, MessageBotSendingLogic messageBotSender, IMessageSender messageSender) : IMessageHandler {
+    public async Task OnGetMessageAsync(MessageDto message, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(message.Content))
             return;
-        
-        Console.WriteLine($"{message.Date:T}\n" +
-                          $"From {message.From?.Id} - {message.From?.FirstName}\n" +
-                          $"{message.Type} - {message.Content}");
-        
-        await messageSender.SendMessageAsync(new SendMessageCommand(
-            message.Chat.Id,
-            message.Content,
-            message.Type));
+
+        await messageBotSaver.TryRememberMessageAsync(message, cancellationToken);
+
+        IEnumerable<Message> answers = await messageBotSender.GetAnswerAsync(message, cancellationToken);
+        foreach (Message answer in answers)
+            await messageSender.SendMessageAsync(
+                new SendMessageCommand(
+                    message.Chat.Id,
+                    answer.Content,
+                    answer.Type),
+                cancellationToken);
     }
 }

@@ -8,16 +8,16 @@ using Infrastructure.Services.TelegramAPI.Application.Extensions;
 namespace Infrastructure.Services.TelegramAPI.Application;
 
 public class BotMessageHandler(IMessageHandler messageHandler) : IAsyncObserver<Message?> {
-    public async Task OnNextAsync(Message? message) {
+    public async Task OnNextAsync(Message? message, CancellationToken cancellationToken = default) {
         if (message is null)
             return;
         
-        await messageHandler.OnGetMessageAsync(message.ToDto());
+        await messageHandler.OnGetMessageAsync(message.ToDto(), cancellationToken);
     }
     
-    public Task OnCompletedAsync() 
+    public Task OnCompletedAsync(CancellationToken cancellationToken = default) 
         => Task.CompletedTask;
 
-    public Task OnErrorAsync(Exception error)
+    public Task OnErrorAsync(Exception error, CancellationToken cancellationToken = default)
         => Task.CompletedTask;
 }

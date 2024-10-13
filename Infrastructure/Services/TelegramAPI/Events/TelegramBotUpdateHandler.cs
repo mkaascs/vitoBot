@@ -17,7 +17,7 @@ public class TelegramBotUpdateHandler : IUpdateHandler, IAsyncObservable<Message
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken) {
         IList<Task> onNextTasks = new List<Task>(_messageHandlers.Count);
         foreach (IAsyncObserver<Message?> messageHandler in _messageHandlers)
-            onNextTasks.Add(messageHandler.OnNextAsync(update.Message));
+            onNextTasks.Add(messageHandler.OnNextAsync(update.Message, cancellationToken));
 
         await Task.WhenAll(onNextTasks);
     }
