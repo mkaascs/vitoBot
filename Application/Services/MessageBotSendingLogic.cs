@@ -22,7 +22,7 @@ public class MessageBotSendingLogic(BotLogicConfiguration configuration, IMessag
                 ((ulong)receivedMessage.Chat.Id, cancellationToken);
             
             if (string.IsNullOrWhiteSpace(message.Content?.Content))
-                continue;
+                break;
 
             Message? alreadyExistingAnswer = answers.Find(answer
                 => answer.Content == message.Content.Content && answer.Type == message.Content.Type);
