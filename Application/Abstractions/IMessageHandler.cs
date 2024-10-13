@@ -10,5 +10,6 @@ public interface IMessageHandler {
     /// Called when a new message is received
     /// </summary>
     /// <param name="message">A <see cref="MessageDto"/> model which contains all information about the received message</param>
-    void OnGetMessage(MessageDto message);
+    /// <returns>Completed task</returns>
+    Task OnGetMessageAsync(MessageDto message);
 }

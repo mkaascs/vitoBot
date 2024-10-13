@@ -1,11 +1,11 @@
-using ContentType = Domain.VitoAPI.ContentType;
-
 using Application.DTO;
 
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Infrastructure.Services.TelegramAPI.Extensions;
+using ContentType = Domain.VitoAPI.ContentType;
+
+namespace Infrastructure.Services.TelegramAPI.Application.Extensions;
 
 internal static class TelegramMessageExtensions {
     public static MessageDto ToDto(this Message message) {
@@ -29,28 +29,28 @@ internal static class TelegramMessageExtensions {
         content = null;
         type = ContentType.Text;
         
-        switch (message.Type) {
-            case MessageType.Text:
+        switch (message) {
+            case { Type: MessageType.Text }:
                 content = message.Text;
                 type = ContentType.Text;
                 break;
             
-            case MessageType.Sticker:
+            case { Type: MessageType.Sticker }:
                 content = message.Sticker?.FileId;
                 type = ContentType.Sticker;
                 break;
             
-            case MessageType.Animation:
+            case { Type: MessageType.Animation }:
                 content = message.Animation?.FileId;
                 type = ContentType.Gif;
                 break;
             
-            case MessageType.Photo:
+            case { Type: MessageType.Photo }:
                 content = message.Photo?.FirstOrDefault()?.FileId;
                 type = ContentType.Picture;
                 break;
             
-            case MessageType.Video:
+            case { Type: MessageType.Video }:
                 content = message.Video?.FileId;
                 type = ContentType.Video;
                 break;
