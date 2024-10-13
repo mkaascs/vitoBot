@@ -10,7 +10,6 @@ namespace Core;
 
 internal class Program {
     private static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false)
         .Build();
 
