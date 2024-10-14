@@ -2,6 +2,7 @@ using Telegram.Bot;
 
 using Infrastructure.Configuration;
 using Infrastructure.Services.TelegramAPI.Events;
+using Telegram.Bot.Polling;
 
 namespace Infrastructure.Services.TelegramAPI;
 
@@ -12,7 +13,10 @@ public class BotClient(TelegramApiConfiguration configuration) {
     
     public async Task<BotInfo> GetBotInfoAsync(CancellationToken cancellationToken = default)
         => new(await Bot.GetMeAsync(cancellationToken));
-    
-    public void StartReceiving()
-        => Bot.StartReceiving(UpdateHandler);
+
+    public void StartReceiving() {
+        Bot.StartReceiving(UpdateHandler,
+            new ReceiverOptions {
+                ThrowPendingUpdates = true });
+    }
 }
