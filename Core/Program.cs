@@ -1,4 +1,6 @@
 ﻿using Application.Services;
+using Application.Services.BotCommands;
+using Application.Services.BotLogic;
 
 using Infrastructure.Services.TelegramAPI;
 using Infrastructure.Services.TelegramAPI.Application;
@@ -18,7 +20,7 @@ internal class Program {
     private static void Main() {
         HttpClient httpClient = new();
         BotClient botClient = new(Settings.TelegramApiConfiguration);
-        
+
         botClient.UpdateHandler.Subscribe(
             new BotMessageHandler(
                 new MessageHandler(
@@ -28,8 +30,9 @@ internal class Program {
                         new MessageService(httpClient, Settings.VitoApiConfiguration)),
                     new MessageBotSendingLogic(
                         Settings.BotLogicConfiguration,
-                        new MessageService(httpClient, Settings.VitoApiConfiguration)),
-                    new BotMessageSender(botClient))));
+                        new MessageService(httpClient, Settings.VitoApiConfiguration))),
+                new BotMessageSender(botClient),
+                new BotCommandHandler(new BotCommandsCollection())));
         
         botClient.StartReceiving();
         Console.ReadKey();

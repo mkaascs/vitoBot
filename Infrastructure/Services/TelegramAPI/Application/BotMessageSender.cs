@@ -29,5 +29,5 @@ public class BotMessageSender(BotClient botClient) : IMessageSender {
     };
 
     public async Task SendMessageAsync(SendMessageCommand command, CancellationToken cancellationToken = default)
-        => await _messageSenders[command.Type](command.To, command.Content, cancellationToken);
+        => await _messageSenders[command.Type]((long)command.To, command.Content, cancellationToken);
 }

@@ -1,5 +1,5 @@
 namespace Application.DTO;
 
 public record ChatDto(
-    long Id,
+    ulong Id,
     string? Title);

@@ -5,7 +5,7 @@ using Application.Configuration;
 using Application.DTO;
 using Application.Extensions;
 
-namespace Application.Services;
+namespace Application.Services.BotLogic;
 
 public class MessageBotSendingLogic(BotLogicConfiguration configuration, IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
@@ -19,7 +19,7 @@ public class MessageBotSendingLogic(BotLogicConfiguration configuration, IMessag
 
         while (_randomizer.WithChance(CalculateFinalChance(answers.Count))) {
             Response<Message> message = await messageApiService.GetRandomMessageAsync
-                ((ulong)receivedMessage.Chat.Id, cancellationToken);
+                (receivedMessage.Chat.Id, cancellationToken);
             
             if (string.IsNullOrWhiteSpace(message.Content?.Content))
                 break;

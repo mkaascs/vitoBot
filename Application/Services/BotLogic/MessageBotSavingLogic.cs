@@ -1,11 +1,11 @@
 using Domain.Abstractions;
 using Domain.VitoAPI;
 
-using Application.DTO;
 using Application.Configuration;
+using Application.DTO;
 using Application.Extensions;
 
-namespace Application.Services;
+namespace Application.Services.BotLogic;
 
 public class MessageBotSavingLogic(BotLogicConfiguration configuration, IChatApiService chatApiService, IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
@@ -34,7 +34,7 @@ public class MessageBotSavingLogic(BotLogicConfiguration configuration, IChatApi
 
         await RegisterNewChatIfRequiredAsync(receivedMessage, cancellationToken);
         Response<bool> response = await messageApiService.AddNewMessageAsync(
-            (ulong)receivedMessage.Chat.Id,
+            receivedMessage.Chat.Id,
             new Message(receivedMessage.Content, receivedMessage.Type),
             cancellationToken);
 
@@ -44,9 +44,9 @@ public class MessageBotSavingLogic(BotLogicConfiguration configuration, IChatApi
     private async Task RegisterNewChatIfRequiredAsync(MessageDto receivedMessage, CancellationToken cancellationToken = default) {
         Response<IEnumerable<Chat>> registeredChats = 
             await chatApiService.GetChatsAsync(cancellationToken);
-
+        
         Chat? chatFromReceivedMessage = registeredChats.Content?
-            .FirstOrDefault(chat => chat.Id.Equals((ulong)receivedMessage.Chat.Id));
+            .FirstOrDefault(chat => chat.Id.Equals(receivedMessage.Chat.Id));
         
         if (chatFromReceivedMessage != null)
             return;
@@ -56,7 +56,7 @@ public class MessageBotSavingLogic(BotLogicConfiguration configuration, IChatApi
             : receivedMessage.Chat.Title;
 
         await chatApiService.RegisterNewChatAsync(
-            new Chat((ulong)receivedMessage.Chat.Id, newChatName),
+            new Chat(receivedMessage.Chat.Id, newChatName),
             cancellationToken);
     }
 }

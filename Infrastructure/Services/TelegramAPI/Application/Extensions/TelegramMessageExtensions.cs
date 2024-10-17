@@ -20,10 +20,10 @@ internal static class TelegramMessageExtensions {
     }
     
     private static ChatDto ToDto(this Chat chat)
-        => new(chat.Id, chat.Title);
+        => new((ulong)chat.Id, chat.Title);
 
     private static UserDto? ToDto(this User? user)
-        => user is null ? null : new UserDto(user.Id, user.FirstName);
+        => user is null ? null : new UserDto((ulong)user.Id, user.FirstName);
 
     private static void GetContent(this Message message, out ContentType type, out string? content) {
         content = null;

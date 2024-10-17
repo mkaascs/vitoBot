@@ -1,4 +1,5 @@
 using Application.DTO;
+using Application.DTO.Commands;
 
 namespace Application.Abstractions;
 
@@ -6,11 +7,5 @@ namespace Application.Abstractions;
 /// An interface to handle received messages
 /// </summary>
 public interface IMessageHandler {
-    /// <summary>
-    /// Called when a new message is received
-    /// </summary>
-    /// <param name="message">A <see cref="MessageDto"/> model which contains all information about the received message</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Completed task</returns>
-    Task OnGetMessageAsync(MessageDto message, CancellationToken cancellationToken = default);
+    Task<IEnumerable<SendMessageCommand>> OnGetMessageAsync(MessageDto message, CancellationToken cancellationToken = default);
 }

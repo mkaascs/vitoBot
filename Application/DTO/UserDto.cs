@@ -1,5 +1,5 @@
 namespace Application.DTO;
 
 public record UserDto(
-    long Id,
+    ulong Id,
     string FirstName);
