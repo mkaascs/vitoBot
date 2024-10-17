@@ -39,7 +39,7 @@ public class BotCommandHandler(IEnumerable<IBotCommand> registeredBotCommands) {
         return new[] {
             new SendMessageCommand(
                 (ulong)message.Chat.Id, 
-                "There is no such command",
+                "ERROR: there is no such command",
                 ContentType.Text)
         };
     }
