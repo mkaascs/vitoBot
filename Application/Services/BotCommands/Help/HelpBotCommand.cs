@@ -15,7 +15,7 @@ public class HelpBotCommand(BotCommandsCollection commandsCollection) : IBotComm
             .Select(command => command.GetType()
                 .GetCustomAttribute<BotCommandAttribute>())
             .OfType<BotCommandAttribute>()
-            .Aggregate("vitoBot has the following commands:\n\n", (current, commandAttribute) => current + $"/{commandAttribute.CommandName.ToLower()} - {commandAttribute.Description.ToLower()}\n");
+            .Aggregate("ℹ\ufe0f VitoBot has the following commands:\n\n", (current, commandAttribute) => current + $"/{commandAttribute.CommandName.ToLower()} - {commandAttribute.Description.ToLower()}\n");
 
         return Task.FromResult<IEnumerable<SendMessageCommand>>(new[] {
             new SendMessageCommand(callingMessage.Chat.Id, content, ContentType.Text)

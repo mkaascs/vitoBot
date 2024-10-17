@@ -1,4 +1,4 @@
-using Application.Configuration;
+using Domain.Entities;
 
 using Infrastructure.Configuration;
 
@@ -10,8 +10,8 @@ public class AppSettings {
     public AppSettings(IConfiguration configuration) {
         IConfigurationSection appSettingsSection = configuration.GetSection("AppSettings");
 
-        BotLogicConfiguration = appSettingsSection.GetSection("BotLogic")
-            .Get<BotLogicConfiguration>() ?? throw new InvalidOperationException();
+        DefaultUserSettings = appSettingsSection.GetSection("DefaultSettings")
+            .Get<UserSettings>() ?? throw new InvalidOperationException();
 
         VitoApiConfiguration = appSettingsSection.GetSection("VitoAPI")
             .Get<VitoApiConfiguration>() ?? throw new InvalidOperationException();
@@ -20,7 +20,7 @@ public class AppSettings {
             .Get<TelegramApiConfiguration>() ?? throw new InvalidOperationException();
     }
     
-    public BotLogicConfiguration BotLogicConfiguration { get; }
+    public UserSettings DefaultUserSettings { get; }
     
     public VitoApiConfiguration VitoApiConfiguration { get; }
     

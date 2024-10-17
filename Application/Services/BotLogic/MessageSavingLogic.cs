@@ -1,26 +1,26 @@
 using Domain.Abstractions;
 using Domain.VitoAPI;
 
-using Application.Configuration;
 using Application.DTO;
 using Application.Extensions;
+using Domain.Entities;
 
 namespace Application.Services.BotLogic;
 
-public class MessageSavingLogic(BotLogicConfiguration configuration, IChatApiService chatApiService, IMessageApiService messageApiService) {
+public class MessageSavingLogic(IChatApiService chatApiService, IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
     
-    public async Task<bool> TryRememberMessageAsync(MessageDto receivedMessage,
+    public async Task<bool> TryRememberMessageAsync(MessageDto receivedMessage, UserSettings settings,
         CancellationToken cancellationToken = default) {
 
         if (receivedMessage.Type == ContentType.Text &&
-            _randomizer.WithChance(configuration.ChanceToSaveTextMessage)) {
+            _randomizer.WithChance(settings.ChanceToSaveTextMessage)) {
             
             return await RememberMessageAsync(receivedMessage, cancellationToken);
         }
 
         if (receivedMessage.Type != ContentType.Text &&
-            _randomizer.WithChance(configuration.ChanceToSaveMessage)) {
+            _randomizer.WithChance(settings.ChanceToSaveMessage)) {
             
             return await RememberMessageAsync(receivedMessage, cancellationToken);
         }

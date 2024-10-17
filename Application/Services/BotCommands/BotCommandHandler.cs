@@ -41,7 +41,7 @@ public class BotCommandHandler(char commandSymbol, IMessageSender messageSender,
         await messageSender.SendMessageAsync(
             new SendMessageCommand(
                 message.Chat.Id,
-                "Error: there is no such command",
+                "\u274c there is no such command",
                 ContentType.Text),
             cancellationToken);
 
