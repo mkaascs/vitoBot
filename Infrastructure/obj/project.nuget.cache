@@ -2,7 +2,7 @@
   "version": 2,
   "dgSpecHash": "UMFstwrajJPOe5yFA5zmH8PK0aHNus7JJqOHcwNp4Fu6lhQ+R6LqTb4nu6GR2zNHd0UHQYU1uEeQOZEvEhCgdw==",
   "success": true,
-  "projectFilePath": "/Users/makaasz/Проекты/vitoBot/VitoBot/Infrastructure/Infrastructure.csproj",
+  "projectFilePath": "/Users/makaasz/Проекты/vitoBot/vitoBot/Infrastructure/Infrastructure.csproj",
   "expectedPackageFiles": [
     "/Users/makaasz/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/telegram.bot/19.0.0/telegram.bot.19.0.0.nupkg.sha512"

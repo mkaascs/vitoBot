@@ -64,7 +64,7 @@
     "Domain/1.0.0": {
       "type": "project",
       "path": "../Domain/Domain.csproj",
-      "msbuildProject": "../../vitoBot/Domain/Domain.csproj"
+      "msbuildProject": "../Domain/Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {

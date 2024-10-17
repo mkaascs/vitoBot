@@ -2,7 +2,7 @@
   "version": 2,
   "dgSpecHash": "iZDhDz4UBiYKgmNvIKBMv+29DWK3cBLVpnqpVlopUb+5bhwoH1TnY5F3E4qiFPRAeG0b13XkWACfoRbnKGB4Qw==",
   "success": true,
-  "projectFilePath": "/Users/makaasz/Проекты/vitoBot/VitoBot/Core/Core.csproj",
+  "projectFilePath": "/Users/makaasz/Проекты/vitoBot/vitoBot/Core/Core.csproj",
   "expectedPackageFiles": [
     "/Users/makaasz/.nuget/packages/microsoft.extensions.configuration/8.0.0/microsoft.extensions.configuration.8.0.0.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.configuration.abstractions/8.0.0/microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",

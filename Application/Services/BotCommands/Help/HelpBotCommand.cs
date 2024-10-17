@@ -6,7 +6,7 @@ using Application.Abstractions.BotCommands;
 using Application.DTO;
 using Application.DTO.Commands;
 
-namespace Application.Services.BotCommands;
+namespace Application.Services.BotCommands.Help;
 
 [BotCommand(CommandName = "help", Description = "Displays all bot commands")]
 public class HelpBotCommand(BotCommandsCollection commandsCollection) : IBotCommand {
@@ -15,7 +15,7 @@ public class HelpBotCommand(BotCommandsCollection commandsCollection) : IBotComm
             .Select(command => command.GetType()
                 .GetCustomAttribute<BotCommandAttribute>())
             .OfType<BotCommandAttribute>()
-            .Aggregate("vitoBot has the following commands:\n\n", (current, commandAttribute) => current + $"   /{commandAttribute.CommandName.ToLower()} - {commandAttribute.Description.ToLower()}\n");
+            .Aggregate("vitoBot has the following commands:\n\n", (current, commandAttribute) => current + $"/{commandAttribute.CommandName.ToLower()} - {commandAttribute.Description.ToLower()}\n");
 
         return Task.FromResult<IEnumerable<SendMessageCommand>>(new[] {
             new SendMessageCommand(callingMessage.Chat.Id, content, ContentType.Text)

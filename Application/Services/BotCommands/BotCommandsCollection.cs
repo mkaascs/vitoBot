@@ -1,6 +1,8 @@
 using System.Collections;
 
 using Application.Abstractions.BotCommands;
+using Application.Services.BotCommands.Help;
+using Application.Services.BotCommands.Info;
 
 namespace Application.Services.BotCommands;
 

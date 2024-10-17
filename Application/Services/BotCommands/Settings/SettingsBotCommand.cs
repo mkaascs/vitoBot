@@ -2,7 +2,7 @@ using Application.Abstractions.BotCommands;
 using Application.DTO;
 using Application.DTO.Commands;
 
-namespace Application.Services.BotCommands;
+namespace Application.Services.BotCommands.Settings;
 
 [BotCommand(CommandName = "settings", Description = "Allows you to change the chances of sending and saving messages")]
 public class SettingsBotCommand : IBotCommand {

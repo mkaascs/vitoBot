@@ -1,11 +1,9 @@
 using Application.DTO;
-
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-
 using ContentType = Domain.VitoAPI.ContentType;
 
-namespace Infrastructure.Services.TelegramAPI.Application.Extensions;
+namespace Infrastructure.Services.TelegramAPI.Extensions;
 
 internal static class TelegramMessageExtensions {
     public static MessageDto ToDto(this Message message) {

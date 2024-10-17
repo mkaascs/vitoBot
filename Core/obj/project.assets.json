@@ -583,17 +583,17 @@
     "Application/1.0.0": {
       "type": "project",
       "path": "../Application/Application.csproj",
-      "msbuildProject": "../../vitoBot/Application/Application.csproj"
+      "msbuildProject": "../Application/Application.csproj"
     },
     "Domain/1.0.0": {
       "type": "project",
       "path": "../Domain/Domain.csproj",
-      "msbuildProject": "../../vitoBot/Domain/Domain.csproj"
+      "msbuildProject": "../Domain/Domain.csproj"
     },
     "Infrastructure/1.0.0": {
       "type": "project",
       "path": "../Infrastructure/Infrastructure.csproj",
-      "msbuildProject": "../../vitoBot/Infrastructure/Infrastructure.csproj"
+      "msbuildProject": "../Infrastructure/Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {

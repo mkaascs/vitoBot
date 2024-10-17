@@ -7,7 +7,7 @@ using Application.Extensions;
 
 namespace Application.Services.BotLogic;
 
-public class MessageBotSavingLogic(BotLogicConfiguration configuration, IChatApiService chatApiService, IMessageApiService messageApiService) {
+public class MessageSavingLogic(BotLogicConfiguration configuration, IChatApiService chatApiService, IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
     
     public async Task<bool> TryRememberMessageAsync(MessageDto receivedMessage,

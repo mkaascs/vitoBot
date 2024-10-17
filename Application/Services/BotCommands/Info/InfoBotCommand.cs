@@ -1,10 +1,9 @@
-using Domain.VitoAPI;
-
+using Application.Abstractions.BotCommands;
 using Application.DTO;
 using Application.DTO.Commands;
-using Application.Abstractions.BotCommands;
+using Domain.VitoAPI;
 
-namespace Application.Services.BotCommands;
+namespace Application.Services.BotCommands.Info;
 
 [BotCommand(CommandName = "info", Description = "Displays general information about the bot")]
 public class InfoBotCommand : IBotCommand {

@@ -1,7 +1,7 @@
 ﻿using Application.Services;
 using Application.Services.BotCommands;
 using Application.Services.BotLogic;
-
+using Infrastructure.Configuration;
 using Infrastructure.Services.TelegramAPI;
 using Infrastructure.Services.TelegramAPI.Application;
 using Infrastructure.Services.VitoAPI;
@@ -24,15 +24,24 @@ internal class Program {
         botClient.UpdateHandler.Subscribe(
             new BotMessageHandler(
                 new MessageHandler(
-                    new MessageBotSavingLogic(
+                    new BotCommandHandler(
+                        '/',
+                        new BotMessageSender(botClient),
+                        new BotCommandsCollection()),
+                    new BotMessageSender(botClient),
+                    new MessageSavingLogic(
                         Settings.BotLogicConfiguration,
-                        new ChatService(httpClient, Settings.VitoApiConfiguration),
-                        new MessageService(httpClient, Settings.VitoApiConfiguration)),
-                    new MessageBotSendingLogic(
+                        new ChatService(
+                            httpClient,
+                            Settings.VitoApiConfiguration),
+                        new MessageService(
+                            httpClient,
+                            Settings.VitoApiConfiguration)),
+                    new MessageSendingLogic(
                         Settings.BotLogicConfiguration,
-                        new MessageService(httpClient, Settings.VitoApiConfiguration))),
-                new BotMessageSender(botClient),
-                new BotCommandHandler(new BotCommandsCollection())));
+                        new MessageService(
+                            httpClient,
+                            Settings.VitoApiConfiguration)))));
         
         botClient.StartReceiving();
         Console.ReadKey();

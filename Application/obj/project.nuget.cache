@@ -2,7 +2,7 @@
   "version": 2,
   "dgSpecHash": "MdvYgulnWA9Kb5XUYv15zuVaugeekomvn/aIaAWX8BpbzT19HVqNC7uZgfVRABL74I0QlznJwFvvmBmBdrFGAA==",
   "success": true,
-  "projectFilePath": "/Users/makaasz/Проекты/vitoBot/VitoBot/Application/Application.csproj",
+  "projectFilePath": "/Users/makaasz/Проекты/vitoBot/vitoBot/Application/Application.csproj",
   "expectedPackageFiles": [
     "/Users/makaasz/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
   ],

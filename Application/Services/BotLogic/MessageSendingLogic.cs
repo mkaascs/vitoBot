@@ -7,7 +7,7 @@ using Application.Extensions;
 
 namespace Application.Services.BotLogic;
 
-public class MessageBotSendingLogic(BotLogicConfiguration configuration, IMessageApiService messageApiService) {
+public class MessageSendingLogic(BotLogicConfiguration configuration, IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
 
     private int UnansweredMessagesQuantity { get; set; } = 0;
