@@ -51,8 +51,7 @@ public class SettingsBotCommand(IUserSettingsRepository settingsRepository) : IB
     }
 
     private async Task<IEnumerable<SendMessageCommand>> CallAsync(MessageDto callingMessage,
-        CancellationToken cancellationToken = default)
-    {
+        CancellationToken cancellationToken = default) {
 
         UserSettings userSettings = await settingsRepository
             .GetUserSettingsByChatIdAsync(callingMessage.Chat.Id, cancellationToken);

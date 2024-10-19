@@ -9,13 +9,15 @@ using Application.DTO.Commands;
 
 namespace Application.Services.BotCommands;
 
-public class BotCommandHandler(char commandSymbol, IMessageSender messageSender, BotCommandsCollection commandsCollection) {
+public class BotCommandHandler(IMessageSender messageSender, BotCommandsCollection commandsCollection) {
+    private const char CommandSymbol = '/';
+    
     public async Task<bool> TryExecuteCommand(MessageDto message, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(message.Content))
             return false;
 
         string[] splitMessage = message.Content.Trim().Split(' ');
-        if (splitMessage[0][0] != commandSymbol)
+        if (splitMessage[0][0] != CommandSymbol)
             return false;
 
         foreach (IBotCommand command in commandsCollection) {
@@ -49,5 +51,5 @@ public class BotCommandHandler(char commandSymbol, IMessageSender messageSender,
     }
 
     private bool IsCommand(BotCommandAttribute commandAttribute, string message)
-        => message.ToLower() == $"{commandSymbol}{commandAttribute.CommandName.ToLower()}";
+        => message.ToLower() == $"{CommandSymbol}{commandAttribute.CommandName.ToLower()}";
 }

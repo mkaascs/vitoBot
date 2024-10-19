@@ -1,47 +1,41 @@
-﻿using Application.Services;
-using Application.Services.BotCommands;
-using Application.Services.BotLogic;
-using Infrastructure;
-using Infrastructure.Configuration;
-using Infrastructure.Repositories;
-using Infrastructure.Services.TelegramAPI;
-using Infrastructure.Services.TelegramAPI.Application;
-using Infrastructure.Services.VitoAPI;
+﻿using Serilog;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core;
 
 internal class Program {
-    private static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json", optional: false)
-        .Build();
-
-    private static AppSettings Settings { get; } = new(Configuration);
-    
     private static void Main() {
-        using HttpClient httpClient = new();
-        using ApplicationDbContext dbContext = new();
+        IConfiguration configuration = BuildConfiguration();
         
-        BotClient botClient = new(Settings.TelegramApiConfiguration);
-        UserSettingsRepository userSettingsRepository = new(dbContext, Settings.DefaultUserSettings);
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateLogger();
+        
+        Log.Logger.Information("Application was started");
 
-        botClient.UpdateHandler.Subscribe(
-            new BotMessageHandler(
-                new MessageHandler(
-                    new BotCommandHandler(
-                        '/',
-                        new BotMessageSender(botClient),
-                        new BotCommandsCollection(userSettingsRepository)),
-                    new BotMessageSender(botClient),
-                    new MessageSavingLogic(
-                        new ChatService(httpClient, Settings.VitoApiConfiguration),
-                        new MessageService(httpClient, Settings.VitoApiConfiguration)),
-                    new MessageSendingLogic(
-                        new MessageService(httpClient, Settings.VitoApiConfiguration)),
-                    userSettingsRepository)));
+        IHost host = BuildHost(configuration);
+
+        host.Services.GetService<App>()?.Run();
+    }
+    
+    private static IConfiguration BuildConfiguration() {
+        IConfigurationBuilder builder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
         
-        botClient.StartReceiving();
-        Console.ReadKey();
+        return builder.Build();
+    }
+
+    private static IHost BuildHost(IConfiguration configuration) {
+        return Host.CreateDefaultBuilder()
+            .ConfigureServices(services => {
+                Startup.ConfigureServices(configuration, services); })
+            .UseSerilog()
+            .Build();
     }
 }

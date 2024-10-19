@@ -1,9 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "MdvYgulnWA9Kb5XUYv15zuVaugeekomvn/aIaAWX8BpbzT19HVqNC7uZgfVRABL74I0QlznJwFvvmBmBdrFGAA==",
+  "dgSpecHash": "0CfVzvJyQFIdUybUNnp8z9u3fGBU+OT5xkZZBtirXJmxelidi64A+FXTnlqi6XqZ/DxOq35wxuSJ9b96PJQL1w==",
   "success": true,
   "projectFilePath": "/Users/makaasz/Проекты/vitoBot/vitoBot/Application/Application.csproj",
   "expectedPackageFiles": [
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.1/microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.2/microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.logging/8.0.1/microsoft.extensions.logging.8.0.1.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.2/microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.options/8.0.2/microsoft.extensions.options.8.0.2.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []

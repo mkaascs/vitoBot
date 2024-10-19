@@ -1,12 +1,8 @@
+using Microsoft.Extensions.Configuration;
+
 namespace Infrastructure.Configuration;
 
-public class TelegramApiConfiguration {
-    public TelegramApiConfiguration(string apiKey) {
-        if (string.IsNullOrWhiteSpace(apiKey))
-            throw new ArgumentException(null, nameof(apiKey));
-
-        ApiKey = apiKey;
-    }
-    
-    public string ApiKey { get; set; }
+public class TelegramApiConfiguration(IConfiguration configuration) {
+    public string ApiKey { get; } = configuration["TelegramAPI:ApiKey"] 
+                                    ?? throw new InvalidOperationException("There is no api key in TelegramApi configuration");
 }

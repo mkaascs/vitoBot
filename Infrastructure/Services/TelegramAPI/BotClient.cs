@@ -1,15 +1,15 @@
 using Telegram.Bot;
 
-using Infrastructure.Configuration;
-using Infrastructure.Services.TelegramAPI.Events;
 using Telegram.Bot.Polling;
+
+using Infrastructure.Configuration;
 
 namespace Infrastructure.Services.TelegramAPI;
 
-public class BotClient(TelegramApiConfiguration configuration) {
+public class BotClient(TelegramApiConfiguration configuration, TelegramBotUpdateHandler updateHandler) {
     public TelegramBotClient Bot { get; } = new(configuration.ApiKey);
     
-    public TelegramBotUpdateHandler UpdateHandler { get; } = new();
+    public TelegramBotUpdateHandler UpdateHandler { get; } = updateHandler;
     
     public async Task<BotInfo> GetBotInfoAsync(CancellationToken cancellationToken = default)
         => new(await Bot.GetMeAsync(cancellationToken));
