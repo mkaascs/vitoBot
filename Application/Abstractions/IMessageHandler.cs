@@ -7,5 +7,5 @@ namespace Application.Abstractions;
 /// An interface to handle received messages
 /// </summary>
 public interface IMessageHandler {
-    Task OnGetMessageAsync(MessageDto message, CancellationToken cancellationToken = default);
+    Task OnGetMessageAsync(MessageDto receivedMessage, CancellationToken cancellationToken = default);
 }

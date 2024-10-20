@@ -15,6 +15,7 @@ internal static class ApplicationServiceExtensions {
         services.AddTransient<BotCommandHandler>();
         services.AddTransient<MessageSendingLogic>();
         services.AddTransient<MessageSavingLogic>();
+        services.AddTransient<MessageBotLogic>();
         
         return services;
     }
