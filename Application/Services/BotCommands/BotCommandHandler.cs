@@ -43,7 +43,7 @@ public class BotCommandHandler(IMessageSender messageSender, BotCommandsCollecti
         await messageSender.SendMessageAsync(
             new SendMessageCommand(
                 message.Chat.Id,
-                "\u274c there is no such command",
+                "\u274c Такой команды не существует",
                 ContentType.Text),
             cancellationToken);
 

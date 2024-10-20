@@ -8,7 +8,7 @@ using Application.DTO.Commands;
 
 namespace Application.Services.BotCommands.Settings;
 
-[BotCommand(CommandName = "settings", Description = "Allows you to change the chances of sending and saving messages")]
+[BotCommand(CommandName = "settings", Description = "Позволяет настроить логику бота")]
 public class SettingsBotCommand(IUserSettingsRepository settingsRepository) : IBotCommand {
     private readonly List<Action<decimal, UserSettings>> _chances = [
         (newChance, userSettings) => userSettings.DefaultChanceToSendMessage = newChance,
@@ -27,17 +27,17 @@ public class SettingsBotCommand(IUserSettingsRepository settingsRepository) : IB
 
         if (!int.TryParse(arguments[0], out int index) || !decimal.TryParse(arguments[1], out decimal newChance))
             return new[] {
-                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Incorrect arguments format", ContentType.Text)
+                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Неверный формат аргументов", ContentType.Text)
             };
 
         if (index is < 1 or > 3)
             return new[] {
-                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Incorrect index. It must be no less than 1 and no more than 3", ContentType.Text)
+                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Неверный индекс. Он не должен быть меньше 1 и больше 3", ContentType.Text)
             };
         
         if (newChance is < 0m or > 1m)
             return new[] {
-                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Incorrect new chance. It must be no less than 0 and no more than 1", ContentType.Text)
+                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Неверный шанс. Он должен быть дробным числом от 0 до 1 включительно", ContentType.Text)
             };
 
         _chances[index - 1](newChance, userSettings);
@@ -46,7 +46,7 @@ public class SettingsBotCommand(IUserSettingsRepository settingsRepository) : IB
         await settingsRepository.UpdateUserSettingsAsync(userSettings, cancellationToken);
 
         return new[] {
-            new SendMessageCommand(callingMessage.Chat.Id, "\u2705 Settings was changed successfully", ContentType.Text)
+            new SendMessageCommand(callingMessage.Chat.Id, "\u2705 Настройки были изменены успешно", ContentType.Text)
         };
     }
 
@@ -56,11 +56,11 @@ public class SettingsBotCommand(IUserSettingsRepository settingsRepository) : IB
         UserSettings userSettings = await settingsRepository
             .GetUserSettingsByChatIdAsync(callingMessage.Chat.Id, cancellationToken);
 
-        string content = $"ℹ\ufe0f Current vitoBot settings:\n\n" +
-                         $"1) A default chance to send message - {userSettings.DefaultChanceToSendMessage:0.######}\n" +
-                         $"2) A chance to save text message - {userSettings.ChanceToSaveTextMessage:0.######}\n" +
-                         $"3) A chance to save non-text message - {userSettings.ChanceToSaveMessage:0.######}\n\n" +
-                         $"ℹ\ufe0f To change the chance pass the arguments like this:\n[command] <index> <newChance>";
+        string content = $"ℹ\ufe0f Действующие настройки VitoBot:\n\n" +
+                         $"1) Стандартный шанс отправить сообщение - {userSettings.DefaultChanceToSendMessage:0.######}\n" +
+                         $"2) Шанс сохранить текстовое сообщение - {userSettings.ChanceToSaveTextMessage:0.######}\n" +
+                         $"3) Шанс сохранить нетекстовое сообщение - {userSettings.ChanceToSaveMessage:0.######}\n\n" +
+                         $"Чтобы изменить шанс, передайте аргументы в таком виде:\n[команда] <порядковый номер> <новый шанс>";
         
         return new[] {
             new SendMessageCommand(callingMessage.Chat.Id, content, ContentType.Text)

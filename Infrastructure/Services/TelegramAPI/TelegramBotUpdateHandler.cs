@@ -19,11 +19,11 @@ public class TelegramBotUpdateHandler(ILogger<TelegramBotUpdateHandler> logger) 
     }
     
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken) {
-        if (update.Message is null || string.IsNullOrWhiteSpace(update.Message.Text))
+        if (update.Message is null)
             return;
         
         logger.LogInformation("A message received: {from}: {text}",
-            update.Message.From?.FirstName, update.Message.Text);
+            update.Message.Chat.Title ?? update.Message.From?.FirstName, update.Message.Text);
         
         IList<Task> onGetTasks = new List<Task>(_messageHandlers.Count);
         foreach (IMessageHandler messageHandler in _messageHandlers)
