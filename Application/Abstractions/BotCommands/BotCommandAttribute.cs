@@ -1,7 +1,7 @@
 namespace Application.Abstractions.BotCommands;
 
 public class BotCommandAttribute : Attribute {
-    private string _botCommandName = "/command";
+    private string _botCommandName = "command";
     private string _botCommandDescription = "some command";
     
     public BotCommandAttribute() { }

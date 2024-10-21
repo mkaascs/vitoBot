@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "0CfVzvJyQFIdUybUNnp8z9u3fGBU+OT5xkZZBtirXJmxelidi64A+FXTnlqi6XqZ/DxOq35wxuSJ9b96PJQL1w==",
+  "dgSpecHash": "gwcYzZHHycEZVY1+QzVj1tiETTMSQJjDAN9g+NBKGwoyP3B4ybfwAM2wrIbhMEYz1ugCTk7/aXce2/LZlhRkEw==",
   "success": true,
   "projectFilePath": "/Users/makaasz/Проекты/vitoBot/vitoBot/Application/Application.csproj",
   "expectedPackageFiles": [
+    "/Users/makaasz/.nuget/packages/fluentvalidation/11.10.0/fluentvalidation.11.10.0.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.1/microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.2/microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.logging/8.0.1/microsoft.extensions.logging.8.0.1.nupkg.sha512",

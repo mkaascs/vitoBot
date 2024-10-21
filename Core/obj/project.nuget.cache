@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "dGstBhnUm9VxOblsHWP2orjbXAsO7xgGFClPGDkNQtxnsSIJQBn1Dhgjf51NxnShm3SmmIEYU7inAvh4HwKJZA==",
+  "dgSpecHash": "VGaaUWi+rGTrwUakEIGWZrwIWqe5JLJsqRaLfjaKj9TUz9KDQW66RtzsyCTkKoQXZbp6VBNs80/eY0EkfnkD/Q==",
   "success": true,
   "projectFilePath": "/Users/makaasz/Проекты/vitoBot/vitoBot/Core/Core.csproj",
   "expectedPackageFiles": [
+    "/Users/makaasz/.nuget/packages/fluentvalidation/11.10.0/fluentvalidation.11.10.0.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.codeanalysis.analyzers/3.3.3/microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",

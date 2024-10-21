@@ -12,9 +12,10 @@ internal static class ApplicationServiceExtensions {
         services.AddSingleton<BotCommandsCollection>();
         
         services.AddTransient<IMessageHandler, MessageHandler>();
-        services.AddTransient<BotCommandHandler>();
-        services.AddTransient<MessageSendingLogic>();
+        services.AddTransient<IMessageHandler, BotCommandHandler>();
+        services.AddTransient<MessageReplyingLogic>();
         services.AddTransient<MessageSavingLogic>();
+        services.AddTransient<MessageBotLogic>();
         
         return services;
     }

@@ -1,9 +1,9 @@
 using Domain.Abstractions;
+using Domain.Entities;
 using Domain.VitoAPI;
 
 using Application.DTO;
 using Application.Extensions;
-using Domain.Entities;
 
 namespace Application.Services.BotLogic;
 

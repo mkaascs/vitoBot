@@ -1,16 +1,15 @@
 using Microsoft.Extensions.Logging;
 
+using Application.Abstractions;
+
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 
-using Application.Abstractions;
+namespace Infrastructure.Services.TelegramAPI.Application;
 
-using Infrastructure.Services.TelegramAPI.Extensions;
-
-namespace Infrastructure.Services.TelegramAPI;
-
-public class TelegramBotUpdateHandler(ILogger<TelegramBotUpdateHandler> logger) : IUpdateHandler {
+public class TelegramBotUpdateHandler(TelegramBotMessageSender messageSender, ILogger logger) : IUpdateHandler {
+    private const char CommandSymbol = '/';
     private readonly List<IMessageHandler> _messageHandlers = [];
     
     public void Subscribe(IMessageHandler messageHandler) {
@@ -24,10 +23,17 @@ public class TelegramBotUpdateHandler(ILogger<TelegramBotUpdateHandler> logger) 
         
         logger.LogInformation("A message received: {from}: {text}",
             update.Message.Chat.Title ?? update.Message.From?.FirstName, update.Message.Text);
+
+        string? trimmedTextMessage = update.Message.Text;
+
+        IMessageHandlingContext context = trimmedTextMessage != null && trimmedTextMessage.StartsWith(CommandSymbol)
+            ? new TelegramBotCommandHandlingContext(trimmedTextMessage[1..], update.Message, messageSender)
+            : new TelegramMessageHandlingContext(update.Message, messageSender);
+        
         
         IList<Task> onGetTasks = new List<Task>(_messageHandlers.Count);
         foreach (IMessageHandler messageHandler in _messageHandlers)
-            onGetTasks.Add(messageHandler.OnGetMessageAsync(update.Message.ToDto(), cancellationToken));
+            onGetTasks.Add(messageHandler.OnGetMessageAsync(context, cancellationToken));
         
         await Task.WhenAll(onGetTasks);
     }
