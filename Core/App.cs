@@ -4,11 +4,12 @@ using Infrastructure.Services.TelegramAPI;
 
 namespace Core;
 
-public class App(BotClient botClient, IMessageHandler messageHandler) {
+public class App(BotClient botClient, IEnumerable<IMessageHandler> messageHandlers) {
     public void Run() {
-        botClient.UpdateHandler.Subscribe(messageHandler);
-        botClient.StartReceiving();
+        foreach (IMessageHandler messageHandler in messageHandlers)
+            botClient.UpdateHandler.Subscribe(messageHandler);
         
+        botClient.StartReceiving();
         Console.ReadLine();
     }
 }

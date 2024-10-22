@@ -8,6 +8,7 @@ internal sealed class Startup {
     public static IServiceCollection ConfigureServices(IConfiguration configuration, IServiceCollection services) {
         services.AddTransient<App>();
         services.AddSingleton(configuration);
+        services.AddSingleton<IServiceProvider>(services.BuildServiceProvider());
 
         services.AddVitoApiServices();
         

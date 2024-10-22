@@ -1,18 +1,17 @@
 using Domain.Abstractions;
+using Domain.Entities;
 using Domain.VitoAPI;
 
 using Application.DTO;
+using Application.DTO.Commands;
 using Application.Extensions;
-using Domain.Entities;
 
 namespace Application.Services.BotLogic;
 
-public class MessageSendingLogic(IMessageApiService messageApiService) {
+public class MessageReplyingLogic(IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
-
-    private int UnansweredMessagesQuantity { get; set; } = 0;
-
-    public async Task<IEnumerable<Message>> GetAnswerAsync(MessageDto receivedMessage, UserSettings userSettings,
+    
+    public async Task<IEnumerable<SendMessageCommand>> GetAnswerAsync(MessageDto receivedMessage, UserSettings userSettings,
         CancellationToken cancellationToken = default) {
         
         List<Message> answers = [];
@@ -31,18 +30,13 @@ public class MessageSendingLogic(IMessageApiService messageApiService) {
                 continue;
             
             answers.Add(message.Content);
-            UnansweredMessagesQuantity = 0;
         }
-
-        if (answers.Count == 0)
-            UnansweredMessagesQuantity++;
         
-        return answers;
+        return answers.Select(answer => new SendMessageCommand(answer.Content, answer.Type));
     }
 
     private decimal CalculateFinalChance(decimal defaultChanceToSendMessage, int answersCount) {
         decimal finalChance = defaultChanceToSendMessage
-                              * (decimal)Math.Log2(UnansweredMessagesQuantity + 2)
                               / (answersCount + 1);
 
         return finalChance > 1m

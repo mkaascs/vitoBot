@@ -27,11 +27,8 @@ internal static class InfrastructureServicesExtensions {
     }
 
     public static IServiceCollection AddTelegramApiServices(this IServiceCollection services) {
-        services.AddSingleton<TelegramApiConfiguration>();
         services.AddSingleton<BotClient>();
-
-        services.AddTransient<IMessageSender, BotMessageSender>();
-        services.AddTransient<TelegramBotUpdateHandler>();
+        services.AddSingleton<TelegramApiConfiguration>();
         
         return services;
     }
