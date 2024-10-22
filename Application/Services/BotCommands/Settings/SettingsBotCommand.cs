@@ -1,69 +1,79 @@
+using FluentValidation;
+using FluentValidation.Results;
+
 using Domain.Abstractions;
 using Domain.Entities;
 using Domain.VitoAPI;
 
 using Application.Abstractions.BotCommands;
-using Application.DTO;
 using Application.DTO.Commands;
 
 namespace Application.Services.BotCommands.Settings;
 
 [BotCommand(CommandName = "settings", Description = "Позволяет настроить логику бота")]
-public class SettingsBotCommand(IUserSettingsRepository settingsRepository) : IBotCommand {
-    private readonly List<Action<decimal, UserSettings>> _chances = [
+public class SettingsBotCommand : IBotCommand {
+    #region Chance merge
+
+    private readonly List<Action<decimal, UserSettings>> _mergedChances = [
         (newChance, userSettings) => userSettings.DefaultChanceToSendMessage = newChance,
         (newChance, userSettings) => userSettings.ChanceToSaveTextMessage = newChance,
         (newChance, userSettings) => userSettings.ChanceToSaveMessage = newChance
     ];
+
+    #endregion
+
+    private readonly IUserSettingsRepository _settingsRepository;
+    private readonly IValidator<IBotCommandHandlingContext> _commandValidator;
+
+    public SettingsBotCommand(IUserSettingsRepository settingsRepository) {
+        ArgumentNullException.ThrowIfNull(settingsRepository);
+
+        _settingsRepository = settingsRepository;
+        _commandValidator = new SettingsBotCommandValidator(_mergedChances.Count);
+    }
     
-    public async Task<IEnumerable<SendMessageCommand>> CallAsync(MessageDto callingMessage, string[] arguments,
-        CancellationToken cancellationToken = default) {
+    public async Task CallAsync(IBotCommandHandlingContext context, CancellationToken cancellationToken = default) {
+        UserSettings userSettings = await _settingsRepository
+            .GetUserSettingsByChatIdAsync(context.Message.Chat.Id, cancellationToken);
         
-        if (arguments.Length == 0)
-            return await CallAsync(callingMessage, cancellationToken);
+        if (context.Arguments.Length == 0) {
+            await DisplayUserSettingsAsync(context, userSettings, cancellationToken);
+            return;
+        }
 
-        UserSettings userSettings = await settingsRepository
-            .GetUserSettingsByChatIdAsync(callingMessage.Chat.Id, cancellationToken); 
-
-        if (!int.TryParse(arguments[0], out int index) || !decimal.TryParse(arguments[1], out decimal newChance))
-            return new[] {
-                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Неверный формат аргументов", ContentType.Text)
-            };
-
-        if (index is < 1 or > 3)
-            return new[] {
-                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Неверный индекс. Он не должен быть меньше 1 и больше 3", ContentType.Text)
-            };
+        if (!context.User.AllowedToChangeUserSettings) {
+            await context.AnswerAsync(
+                new SendMessageCommand("\u274c У вас недостаточно прав, чтобы менять настройки бота в этом чате", ContentType.Text),
+                cancellationToken);
+            
+            return;
+        }
         
-        if (newChance is < 0m or > 1m)
-            return new[] {
-                new SendMessageCommand(callingMessage.Chat.Id, "\u274c Неверный шанс. Он должен быть дробным числом от 0 до 1 включительно", ContentType.Text)
-            };
+        ValidationResult result = await _commandValidator.ValidateAsync(context, cancellationToken);
 
-        _chances[index - 1](newChance, userSettings);
-        userSettings.ChatId = callingMessage.Chat.Id;
-        
-        await settingsRepository.UpdateUserSettingsAsync(userSettings, cancellationToken);
+        if (result.Errors.Count > 0) {
+            string errorMessage = result.Errors.First().ErrorMessage;
+            await context.AnswerAsync(new SendMessageCommand(errorMessage, ContentType.Text), cancellationToken);
+            return;
+        }
 
-        return new[] {
-            new SendMessageCommand(callingMessage.Chat.Id, "\u2705 Настройки были изменены успешно", ContentType.Text)
-        };
+        int index = int.Parse(context.Arguments[0]) - 1;
+        decimal newChance = decimal.Parse(context.Arguments[1]);
+
+        _mergedChances[index](newChance, userSettings);
+        await _settingsRepository.UpdateUserSettingsAsync(userSettings, cancellationToken);
+        await context.AnswerAsync(
+            new SendMessageCommand("\u2705 Настройки были успешно изменены", ContentType.Text),
+            cancellationToken);
     }
 
-    private async Task<IEnumerable<SendMessageCommand>> CallAsync(MessageDto callingMessage,
-        CancellationToken cancellationToken = default) {
-
-        UserSettings userSettings = await settingsRepository
-            .GetUserSettingsByChatIdAsync(callingMessage.Chat.Id, cancellationToken);
-
+    private async Task DisplayUserSettingsAsync(IBotCommandHandlingContext context, UserSettings userSettings, CancellationToken cancellationToken = default) {
         string content = $"ℹ\ufe0f Действующие настройки VitoBot:\n\n" +
                          $"1) Стандартный шанс отправить сообщение - {userSettings.DefaultChanceToSendMessage:0.######}\n" +
                          $"2) Шанс сохранить текстовое сообщение - {userSettings.ChanceToSaveTextMessage:0.######}\n" +
                          $"3) Шанс сохранить нетекстовое сообщение - {userSettings.ChanceToSaveMessage:0.######}\n\n" +
                          $"Чтобы изменить шанс, передайте аргументы в таком виде:\n[команда] <порядковый номер> <новый шанс>";
-        
-        return new[] {
-            new SendMessageCommand(callingMessage.Chat.Id, content, ContentType.Text)
-        };
+
+        await context.AnswerAsync(new SendMessageCommand(content, ContentType.Text), cancellationToken);
     }
 }

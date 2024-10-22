@@ -1,7 +1,10 @@
 namespace Application.Abstractions.BotCommands;
 
+/// <summary>
+/// Required attribute of the bot command which represents general information about the command
+/// </summary>
 public class BotCommandAttribute : Attribute {
-    private string _botCommandName = "/command";
+    private string _botCommandName = "command";
     private string _botCommandDescription = "some command";
     
     public BotCommandAttribute() { }
