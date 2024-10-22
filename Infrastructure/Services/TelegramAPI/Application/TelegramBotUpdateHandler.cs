@@ -2,6 +2,8 @@ using Microsoft.Extensions.Logging;
 
 using Application.Abstractions;
 
+using Infrastructure.Services.TelegramAPI.Extensions;
+
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -9,6 +11,7 @@ using Telegram.Bot.Types;
 namespace Infrastructure.Services.TelegramAPI.Application;
 
 public class TelegramBotUpdateHandler(TelegramBotMessageSender messageSender, ILogger logger) : IUpdateHandler {
+    
     private const char CommandSymbol = '/';
     private readonly List<IMessageHandler> _messageHandlers = [];
     
@@ -24,12 +27,7 @@ public class TelegramBotUpdateHandler(TelegramBotMessageSender messageSender, IL
         logger.LogInformation("A message received: {from}: {text}",
             update.Message.Chat.Title ?? update.Message.From?.FirstName, update.Message.Text);
 
-        string? trimmedTextMessage = update.Message.Text;
-
-        IMessageHandlingContext context = trimmedTextMessage != null && trimmedTextMessage.StartsWith(CommandSymbol)
-            ? new TelegramBotCommandHandlingContext(trimmedTextMessage[1..], update.Message, messageSender)
-            : new TelegramMessageHandlingContext(update.Message, messageSender);
-        
+        IMessageHandlingContext context = await GetMessageHandlingContextAsync(botClient, update.Message, cancellationToken);
         
         IList<Task> onGetTasks = new List<Task>(_messageHandlers.Count);
         foreach (IMessageHandler messageHandler in _messageHandlers)
@@ -43,5 +41,24 @@ public class TelegramBotUpdateHandler(TelegramBotMessageSender messageSender, IL
         
         logger.LogError(exception, "An polling error occured");
         return Task.CompletedTask;
+    }
+
+    private async Task<IMessageHandlingContext> GetMessageHandlingContextAsync(ITelegramBotClient botClient, Message message,
+        CancellationToken cancellationToken = default) {
+        
+        string? textMessage = message.Text;
+        TelegramUserContext userContext = await botClient.GetUserContextFrom(message, cancellationToken);
+
+        if (textMessage != null && textMessage.StartsWith(CommandSymbol))
+            return new TelegramBotCommandHandlingContext(
+                userContext,
+                textMessage[1..],
+                message,
+                messageSender);
+
+        return new TelegramMessageHandlingContext(
+            userContext,
+            message,
+            messageSender);
     }
 }

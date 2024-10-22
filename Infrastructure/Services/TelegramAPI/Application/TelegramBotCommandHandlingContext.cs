@@ -5,7 +5,9 @@ using Telegram.Bot.Types;
 namespace Infrastructure.Services.TelegramAPI.Application;
 
 public class TelegramBotCommandHandlingContext : TelegramMessageHandlingContext, IBotCommandHandlingContext {
-    public TelegramBotCommandHandlingContext(string fullCommand, Message message, TelegramBotMessageSender messageSender) : base(message, messageSender) {
+    public TelegramBotCommandHandlingContext(TelegramUserContext userContext, string fullCommand, Message message, TelegramBotMessageSender messageSender)
+        : base(userContext, message, messageSender) {
+        
         ArgumentException.ThrowIfNullOrWhiteSpace(fullCommand);
 
         string[] splitCommand = fullCommand.Split(' ');

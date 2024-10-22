@@ -11,12 +11,14 @@ namespace Application.Services.BotLogic;
 public class MessageReplyingLogic(IMessageApiService messageApiService) {
     private readonly Random _randomizer = new();
     
+    private Dictionary<ulong, int> ChatsWaitingOnResponse { get; set; } = new();
+    
     public async Task<IEnumerable<SendMessageCommand>> GetAnswerAsync(MessageDto receivedMessage, UserSettings userSettings,
         CancellationToken cancellationToken = default) {
         
         List<Message> answers = [];
-
-        while (_randomizer.WithChance(CalculateFinalChance(userSettings.DefaultChanceToSendMessage, answers.Count))) {
+        
+        while (_randomizer.WithChance(CalculateFinalChance(receivedMessage.Chat.Id, userSettings.DefaultChanceToSendMessage, answers.Count))) {
             Response<Message> message = await messageApiService.GetRandomMessageAsync
                 (receivedMessage.Chat.Id, cancellationToken);
             
@@ -30,15 +32,26 @@ public class MessageReplyingLogic(IMessageApiService messageApiService) {
                 continue;
             
             answers.Add(message.Content);
+            if (ChatsWaitingOnResponse.ContainsKey(receivedMessage.Chat.Id))
+                ChatsWaitingOnResponse[receivedMessage.Chat.Id] = 0;
         }
         
-        return answers.Select(answer => new SendMessageCommand(answer.Content, answer.Type));
+        if (answers.Count > 0)
+            return answers.Select(answer => new SendMessageCommand(answer.Content, answer.Type));
+
+        if (!ChatsWaitingOnResponse.TryAdd(receivedMessage.Chat.Id, 1))
+            ChatsWaitingOnResponse[receivedMessage.Chat.Id]++;
+        
+        return [];
     }
 
-    private decimal CalculateFinalChance(decimal defaultChanceToSendMessage, int answersCount) {
+    private decimal CalculateFinalChance(ulong chatId, decimal defaultChanceToSendMessage, int answersCount) {
+        ChatsWaitingOnResponse.TryGetValue(chatId, out int nonAnsweredMessages);
+        
         decimal finalChance = defaultChanceToSendMessage
+                              * (decimal)Math.Log2(nonAnsweredMessages + 2)
                               / (answersCount + 1);
-
+        
         return finalChance > 1m
             ? 1m
             : finalChance;

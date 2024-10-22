@@ -8,17 +8,12 @@ using Telegram.Bot.Types;
 
 namespace Infrastructure.Services.TelegramAPI.Application;
 
-public class TelegramMessageHandlingContext : IMessageHandlingContext {
-    private readonly TelegramBotMessageSender _messageSender;
-
-    public TelegramMessageHandlingContext(Message message, TelegramBotMessageSender messageSender) {
-        ArgumentNullException.ThrowIfNull(message);
-        ArgumentNullException.ThrowIfNull(messageSender);
-
-        (Message, _messageSender) = (message.ToDto(), messageSender);
-    }
+public class TelegramMessageHandlingContext(TelegramUserContext userContext, Message message, TelegramBotMessageSender messageSender) : IMessageHandlingContext {
     
-    public MessageDto Message { get; set; }
+    public IUserContext User { get; set; } = userContext;
+
+    public MessageDto Message { get; set; } = message.ToDto();
+
     public async Task AnswerAsync(SendMessageCommand command, CancellationToken cancellationToken = default) 
-        => await _messageSender.SendMessageAsync((long)Message.Chat.Id, command, cancellationToken);
+        => await messageSender.SendMessageAsync((long)Message.Chat.Id, command, cancellationToken);
 }

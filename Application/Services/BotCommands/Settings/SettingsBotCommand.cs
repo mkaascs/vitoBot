@@ -12,17 +12,22 @@ namespace Application.Services.BotCommands.Settings;
 
 [BotCommand(CommandName = "settings", Description = "Позволяет настроить логику бота")]
 public class SettingsBotCommand : IBotCommand {
+    #region Chance merge
+
     private readonly List<Action<decimal, UserSettings>> _mergedChances = [
         (newChance, userSettings) => userSettings.DefaultChanceToSendMessage = newChance,
         (newChance, userSettings) => userSettings.ChanceToSaveTextMessage = newChance,
         (newChance, userSettings) => userSettings.ChanceToSaveMessage = newChance
     ];
 
+    #endregion
+
     private readonly IUserSettingsRepository _settingsRepository;
     private readonly IValidator<IBotCommandHandlingContext> _commandValidator;
 
     public SettingsBotCommand(IUserSettingsRepository settingsRepository) {
         ArgumentNullException.ThrowIfNull(settingsRepository);
+
         _settingsRepository = settingsRepository;
         _commandValidator = new SettingsBotCommandValidator(_mergedChances.Count);
     }
@@ -36,6 +41,14 @@ public class SettingsBotCommand : IBotCommand {
             return;
         }
 
+        if (!context.User.AllowedToChangeUserSettings) {
+            await context.AnswerAsync(
+                new SendMessageCommand("\u274c У вас недостаточно прав, чтобы менять настройки бота в этом чате", ContentType.Text),
+                cancellationToken);
+            
+            return;
+        }
+        
         ValidationResult result = await _commandValidator.ValidateAsync(context, cancellationToken);
 
         if (result.Errors.Count > 0) {
