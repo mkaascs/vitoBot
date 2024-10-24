@@ -1,21 +1,40 @@
+using System.ComponentModel;
 using System.Net;
 using Domain.VitoAPI;
 using Newtonsoft.Json;
 
 namespace Infrastructure.Services.VitoAPI.Extensions;
 
-internal static class HttpResponseExtensions {
-    public static async Task<Response<T>> ToResponse<T>(this HttpResponseMessage httpResponse, CancellationToken cancellationToken=default) {
-        Response<T> response = new() {
-            StatusCode = httpResponse.StatusCode
+internal static class HttpResponseExtensions
+{
+    public static async ValueTask<Response<T>> ToResponse<T>(
+        this HttpResponseMessage httpResponse,
+        CancellationToken cancellationToken = default)
+    {
+
+        Response response = httpResponse.ToResponse();
+        Response<T> valueResponse = new Response<T>
+        {
+            StatusCode = response.StatusCode,
+            IsSuccess = response.IsSuccess,
+            Content = default
         };
 
-        if (response.StatusCode != HttpStatusCode.OK)
-            return response;
+        if (!response.IsSuccess)
+            return valueResponse;
 
-        response.Content = JsonConvert.DeserializeObject<T>(
+        valueResponse.Content = JsonConvert.DeserializeObject<T>(
             await httpResponse.Content.ReadAsStringAsync(cancellationToken));
 
-        return response;
+        return valueResponse;
+    }
+
+    private static Response ToResponse(this HttpResponseMessage httpResponse)
+    {
+        return new Response
+        {
+            StatusCode = httpResponse.StatusCode,
+            IsSuccess = httpResponse.StatusCode is >= HttpStatusCode.OK and < HttpStatusCode.BadRequest
+        };
     }
 }

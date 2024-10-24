@@ -7,56 +7,59 @@ using Application.Extensions;
 
 namespace Application.Services.BotLogic;
 
-public class MessageSavingLogic(IChatApiService chatApiService, IMessageApiService messageApiService) {
+public class MessageSavingLogic(
+    IChatApiService chatApiService,
+    IMessageApiService messageApiService)
+{
     private readonly Random _randomizer = new();
     
-    public async Task<bool> TryRememberMessageAsync(MessageDto receivedMessage, UserSettings settings,
-        CancellationToken cancellationToken = default) {
+    public async Task<bool> TryRememberMessageAsync(
+        MessageDto receivedMessage,
+        UserSettings settings,
+        CancellationToken cancellationToken = default)
+    {
+        decimal chanceToRememberMessage = receivedMessage.Type == ContentType.Text
+            ? settings.ChanceToSaveTextMessage
+            : settings.ChanceToSaveMessage;
 
-        if (receivedMessage.Type == ContentType.Text &&
-            _randomizer.WithChance(settings.ChanceToSaveTextMessage)) {
-            
-            return await RememberMessageAsync(receivedMessage, cancellationToken);
-        }
-
-        if (receivedMessage.Type != ContentType.Text &&
-            _randomizer.WithChance(settings.ChanceToSaveMessage)) {
-            
-            return await RememberMessageAsync(receivedMessage, cancellationToken);
-        }
-
-        return false;
+        return _randomizer.WithChance(chanceToRememberMessage)
+               && await RememberMessageAsync(receivedMessage, cancellationToken);
     }
 
-    private async Task<bool> RememberMessageAsync(MessageDto receivedMessage, CancellationToken cancellationToken = default) {
+    private async Task<bool> RememberMessageAsync(
+        MessageDto receivedMessage, 
+        CancellationToken cancellationToken = default) 
+    {
         if (string.IsNullOrWhiteSpace(receivedMessage.Content))
             return false;
 
         await RegisterNewChatIfRequiredAsync(receivedMessage, cancellationToken);
-        Response<bool> response = await messageApiService.AddNewMessageAsync(
+        Response response = await messageApiService.AddNewMessageAsync(
             receivedMessage.Chat.Id,
-            new Message(receivedMessage.Content, receivedMessage.Type),
+            new Message(
+                receivedMessage.Content,
+                receivedMessage.Type),
             cancellationToken);
 
-        return response.Content;
+        return response.IsSuccess;
     }
 
-    private async Task RegisterNewChatIfRequiredAsync(MessageDto receivedMessage, CancellationToken cancellationToken = default) {
-        Response<IEnumerable<Chat>> registeredChats = 
-            await chatApiService.GetChatsAsync(cancellationToken);
+    private async Task RegisterNewChatIfRequiredAsync(
+        MessageDto receivedMessage,
+        CancellationToken cancellationToken = default)
+    {
+        Response<Chat> response = await chatApiService
+            .GetChatByIdAsync(receivedMessage.Chat.Id, cancellationToken);
         
-        Chat? chatFromReceivedMessage = registeredChats.Content?
-            .FirstOrDefault(chat => chat.Id.Equals(receivedMessage.Chat.Id));
-        
-        if (chatFromReceivedMessage != null)
+        if (response.Content != null)
             return;
 
-        string? newChatName = string.IsNullOrEmpty(receivedMessage.Chat.Title)
-            ? receivedMessage.From?.FirstName
-            : receivedMessage.Chat.Title;
+        string? newChatName = receivedMessage.Chat.Title ?? receivedMessage.From?.FirstName;
 
         await chatApiService.RegisterNewChatAsync(
-            new Chat(receivedMessage.Chat.Id, newChatName),
+            new Chat(
+                receivedMessage.Chat.Id,
+                newChatName),
             cancellationToken);
     }
 }

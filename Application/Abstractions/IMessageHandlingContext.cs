@@ -6,7 +6,8 @@ namespace Application.Abstractions;
 /// <summary>
 /// An interface which represents the context of the handled message
 /// </summary>
-public interface IMessageHandlingContext {
+public interface IMessageHandlingContext
+{
     /// <summary>
     /// Author of the message
     /// </summary>

@@ -3,7 +3,8 @@ namespace Application.Abstractions.BotCommands;
 /// <summary>
 /// An interface which represents the context of the handled bot command message
 /// </summary>
-public interface IBotCommandHandlingContext : IMessageHandlingContext {
+public interface IBotCommandHandlingContext : IMessageHandlingContext 
+{
     /// <summary>
     /// Name of the command is called
     /// </summary>

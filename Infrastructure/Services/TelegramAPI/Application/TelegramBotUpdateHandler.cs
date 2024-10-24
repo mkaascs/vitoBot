@@ -5,6 +5,7 @@ using Application.Abstractions;
 using Infrastructure.Services.TelegramAPI.Extensions;
 
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 
@@ -45,9 +46,23 @@ public class TelegramBotUpdateHandler(TelegramBotMessageSender messageSender, IL
 
     private async Task<IMessageHandlingContext> GetMessageHandlingContextAsync(ITelegramBotClient botClient, Message message,
         CancellationToken cancellationToken = default) {
-        
+
+        TelegramUserContext userContext;
         string? textMessage = message.Text;
-        TelegramUserContext userContext = await botClient.GetUserContextFrom(message, cancellationToken);
+
+        try {
+            userContext = await botClient.GetUserContextFrom(message, cancellationToken);
+        }
+
+        catch (ApiRequestException exception) {
+            logger.LogWarning(
+                "An {exceptionName} was caught. Sending messages will resume only after {time} seconds",
+                nameof(ApiRequestException),
+                exception.Parameters?.RetryAfter);
+            
+            await Task.Delay((exception.Parameters?.RetryAfter ?? 0) * 1000, cancellationToken);
+            userContext = await botClient.GetUserContextFrom(message, cancellationToken);
+        }
 
         if (textMessage != null && textMessage.StartsWith(CommandSymbol))
             return new TelegramBotCommandHandlingContext(

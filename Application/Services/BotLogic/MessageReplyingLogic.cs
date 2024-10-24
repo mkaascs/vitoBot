@@ -8,48 +8,52 @@ using Application.Extensions;
 
 namespace Application.Services.BotLogic;
 
-public class MessageReplyingLogic(IMessageApiService messageApiService) {
+public class MessageReplyingLogic(IMessageApiService messageApiService)
+{
     private readonly Random _randomizer = new();
     
-    private Dictionary<ulong, int> ChatsWaitingOnResponse { get; set; } = new();
+    private Dictionary<ulong, int> ChatsWaitingOnResponse { get; } = new();
     
-    public async Task<IEnumerable<SendMessageCommand>> GetAnswerAsync(MessageDto receivedMessage, UserSettings userSettings,
-        CancellationToken cancellationToken = default) {
+    public async Task<IEnumerable<SendMessageCommand>> GetAnswerAsync(
+        MessageDto receivedMessage,
+        UserSettings userSettings,
+        CancellationToken cancellationToken = default)
+    {
         
         List<Message> answers = [];
+        ChatsWaitingOnResponse.TryGetValue(receivedMessage.Chat.Id, out int unansweredMessageCount);
         
-        while (_randomizer.WithChance(CalculateFinalChance(receivedMessage.Chat.Id, userSettings.DefaultChanceToSendMessage, answers.Count))) {
-            Response<Message> message = await messageApiService.GetRandomMessageAsync
-                (receivedMessage.Chat.Id, cancellationToken);
+        while (_randomizer.WithChance(CalculateFinalChance(userSettings.DefaultChanceToSendMessage, unansweredMessageCount, answers.Count)))
+        {
             
-            if (string.IsNullOrWhiteSpace(message.Content?.Content))
+            Response<Message> randomMessage = await messageApiService
+                .GetRandomMessageAsync(receivedMessage.Chat.Id, cancellationToken);
+            
+            if (string.IsNullOrWhiteSpace(randomMessage.Content?.Content))
                 break;
 
             Message? alreadyExistingAnswer = answers.Find(answer
-                => answer.Content == message.Content.Content && answer.Type == message.Content.Type);
+                => answer.Content == randomMessage.Content.Content && answer.Type == randomMessage.Content.Type);
 
             if (alreadyExistingAnswer is not null) 
                 continue;
             
-            answers.Add(message.Content);
-            if (ChatsWaitingOnResponse.ContainsKey(receivedMessage.Chat.Id))
-                ChatsWaitingOnResponse[receivedMessage.Chat.Id] = 0;
+            answers.Add(randomMessage.Content);
+            ChatsWaitingOnResponse.Remove(receivedMessage.Chat.Id);
         }
         
         if (answers.Count > 0)
             return answers.Select(answer => new SendMessageCommand(answer.Content, answer.Type));
 
-        if (!ChatsWaitingOnResponse.TryAdd(receivedMessage.Chat.Id, 1))
-            ChatsWaitingOnResponse[receivedMessage.Chat.Id]++;
-        
+        ChatsWaitingOnResponse.TryAdd(receivedMessage.Chat.Id, 1);
+        ChatsWaitingOnResponse[receivedMessage.Chat.Id]++;
         return [];
     }
 
-    private decimal CalculateFinalChance(ulong chatId, decimal defaultChanceToSendMessage, int answersCount) {
-        ChatsWaitingOnResponse.TryGetValue(chatId, out int nonAnsweredMessages);
-        
+    private decimal CalculateFinalChance(decimal defaultChanceToSendMessage, int unansweredMessageCount, int answersCount)
+    {
         decimal finalChance = defaultChanceToSendMessage
-                              * (decimal)Math.Log2(nonAnsweredMessages + 2)
+                              * (decimal)Math.Log2(unansweredMessageCount + 2)
                               / (answersCount + 1);
         
         return finalChance > 1m

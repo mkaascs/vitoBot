@@ -19,8 +19,8 @@ public class TelegramUserContext : IUserContext {
     public bool AllowedToChangeUserSettings { get; set; }
 
     public static async Task<TelegramUserContext> RegisterContextAsync(ITelegramBotClient botClient, Message from,
-        CancellationToken cancellationToken = default)
-    {
+        CancellationToken cancellationToken = default) {
+        
         return from.Chat.Type == ChatType.Private
             ? new TelegramUserContext(true)
             : new TelegramUserContext(from.From, await botClient.GetChatAdministratorsAsync(from.Chat.Id, cancellationToken));

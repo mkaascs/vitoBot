@@ -3,7 +3,8 @@ namespace Application.Abstractions;
 /// <summary>
 /// An interface to handle received messages
 /// </summary>
-public interface IMessageHandler {
+public interface IMessageHandler
+{
     /// <summary>
     /// Executes when a new message was received
     /// </summary>

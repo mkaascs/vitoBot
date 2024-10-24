@@ -3,7 +3,8 @@ namespace Application.Abstractions.BotCommands;
 /// <summary>
 /// An interface which represents the bot command
 /// </summary>
-public interface IBotCommand {
+public interface IBotCommand
+{
     /// <summary>
     /// Executes when this bot command was called
     /// </summary>
