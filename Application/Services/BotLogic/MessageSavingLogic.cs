@@ -26,7 +26,7 @@ public class MessageSavingLogic(
                && await RememberMessageAsync(receivedMessage, cancellationToken);
     }
 
-    private async Task<bool> RememberMessageAsync(
+    private async ValueTask<bool> RememberMessageAsync(
         MessageDto receivedMessage, 
         CancellationToken cancellationToken = default) 
     {
@@ -34,24 +34,22 @@ public class MessageSavingLogic(
             return false;
 
         await RegisterNewChatIfRequiredAsync(receivedMessage, cancellationToken);
-        Response response = await messageApiService.AddNewMessageAsync(
+        return await messageApiService.AddNewMessageAsync(
             receivedMessage.Chat.Id,
             new Message(
                 receivedMessage.Content,
                 receivedMessage.Type),
             cancellationToken);
-
-        return response.IsSuccess;
     }
 
-    private async Task RegisterNewChatIfRequiredAsync(
+    private async ValueTask RegisterNewChatIfRequiredAsync(
         MessageDto receivedMessage,
         CancellationToken cancellationToken = default)
     {
-        Response<Chat> response = await chatApiService
+        Chat? foundChat = await chatApiService
             .GetChatByIdAsync(receivedMessage.Chat.Id, cancellationToken);
         
-        if (response.Content != null)
+        if (foundChat != null)
             return;
 
         string? newChatName = receivedMessage.Chat.Title ?? receivedMessage.From?.FirstName;

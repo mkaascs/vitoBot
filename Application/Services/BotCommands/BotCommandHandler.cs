@@ -8,12 +8,15 @@ using Application.Abstractions.BotCommands;
 
 namespace Application.Services.BotCommands;
 
-public class BotCommandHandler(BotCommandsCollection commandsCollection) : IMessageHandler {
-    public async Task OnGetMessageAsync(IMessageHandlingContext context, CancellationToken cancellationToken = default) {
+public class BotCommandHandler(BotCommandsCollection commandsCollection) : IMessageHandler
+{
+    public async Task OnGetMessageAsync(IMessageHandlingContext context, CancellationToken cancellationToken = default)
+    {
         if (context is not IBotCommandHandlingContext botCommandContext)
             return;
 
-        foreach (IBotCommand botCommand in commandsCollection) {
+        foreach (IBotCommand botCommand in commandsCollection) 
+        {
             BotCommandAttribute? commandAttribute = botCommand.GetType()
                 .GetCustomAttribute<BotCommandAttribute>();
             

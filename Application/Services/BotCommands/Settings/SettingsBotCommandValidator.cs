@@ -4,14 +4,17 @@ using Application.Abstractions.BotCommands;
 
 namespace Application.Services.BotCommands.Settings;
 
-public class SettingsBotCommandValidator : AbstractValidator<IBotCommandHandlingContext> {
-    public SettingsBotCommandValidator(int propertiesQuantity) {
+public class SettingsBotCommandValidator : AbstractValidator<IBotCommandHandlingContext>
+{
+    public SettingsBotCommandValidator(int propertiesQuantity)
+    {
         if (propertiesQuantity < 1)
             throw new ArgumentException($"{nameof(propertiesQuantity)} must be more than 0");
         
         RuleFor(context => context.Arguments)
             .NotEmpty()
-            .Must(arguments => {
+            .Must(arguments =>
+            {
                 if (arguments.Length == 0)
                     return false;
                 
@@ -21,7 +24,8 @@ public class SettingsBotCommandValidator : AbstractValidator<IBotCommandHandling
 
         RuleFor(context => context.Arguments)
             .NotEmpty()
-            .Must(arguments => {
+            .Must(arguments => 
+            {
                 if (arguments.Length < 2)
                     return false;
                 

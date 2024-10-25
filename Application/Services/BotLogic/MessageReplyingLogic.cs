@@ -19,26 +19,24 @@ public class MessageReplyingLogic(IMessageApiService messageApiService)
         UserSettings userSettings,
         CancellationToken cancellationToken = default)
     {
-        
         List<Message> answers = [];
         ChatsWaitingOnResponse.TryGetValue(receivedMessage.Chat.Id, out int unansweredMessageCount);
         
         while (_randomizer.WithChance(CalculateFinalChance(userSettings.DefaultChanceToSendMessage, unansweredMessageCount, answers.Count)))
         {
-            
-            Response<Message> randomMessage = await messageApiService
+            Message? randomMessage = await messageApiService
                 .GetRandomMessageAsync(receivedMessage.Chat.Id, cancellationToken);
             
-            if (string.IsNullOrWhiteSpace(randomMessage.Content?.Content))
+            if (string.IsNullOrWhiteSpace(randomMessage?.Content))
                 break;
 
-            Message? alreadyExistingAnswer = answers.Find(answer
-                => answer.Content == randomMessage.Content.Content && answer.Type == randomMessage.Content.Type);
+            bool messageAlreadyExist = answers.Any(answer
+                => answer.Content == randomMessage.Content && answer.Type == randomMessage.Type);
 
-            if (alreadyExistingAnswer is not null) 
+            if (messageAlreadyExist) 
                 continue;
             
-            answers.Add(randomMessage.Content);
+            answers.Add(randomMessage);
             ChatsWaitingOnResponse.Remove(receivedMessage.Chat.Id);
         }
         

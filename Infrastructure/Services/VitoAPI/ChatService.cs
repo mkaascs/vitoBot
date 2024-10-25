@@ -5,6 +5,7 @@ using Domain.VitoAPI;
 
 using Infrastructure.Configuration;
 using Infrastructure.Services.VitoAPI.Extensions;
+using Infrastructure.Services.VitoAPI.Responses;
 
 namespace Infrastructure.Services.VitoAPI;
 
@@ -18,35 +19,42 @@ public class ChatService(
     VitoApiConfiguration configuration,
     ILogger<ChatService> logger) : IChatApiService
 {
-    public async Task<Response> RegisterNewChatAsync(Chat chat, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> RegisterNewChatAsync(Chat chat, CancellationToken cancellationToken = default)
     {
-        Response response = await httpClient
+        HttpResponseMessage httpResponse = await httpClient
             .PostAsync(chat, CombinePath("chats/"), cancellationToken);
 
-        logger.LogResponse(response, "POST", "register new chat");
-        return response;
+        Response response = await httpResponse.ToResponse(cancellationToken);
+        logger.LogResponse(response, nameof(RegisterNewChatAsync));
+        
+        return response.IsSuccess;
     }
 
-    public async Task<Response<IEnumerable<Chat>>> GetChatsAsync(CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<Chat>?> GetChatsAsync(CancellationToken cancellationToken = default)
     {
-        Response<IEnumerable<Chat>> response = await httpClient
-            .GetAsync<IEnumerable<Chat>>(CombinePath("chats/"), cancellationToken);
+        HttpResponseMessage httpResponse = await httpClient
+            .GetAsync(CombinePath("chats/"), cancellationToken);
+
+        Response<IEnumerable<Chat>> response = await httpResponse
+            .ToResponse<IEnumerable<Chat>>(cancellationToken);
         
-        logger.LogResponse(response, "GET", "get all registered chats");
-        return response;
+        logger.LogResponse(response, nameof(GetChatsAsync));
+        return response.Content;
     }
 
-    public async Task<Response<Chat>> GetChatByIdAsync(ulong chatId, CancellationToken cancellationToken = default)
+    public async ValueTask<Chat?> GetChatByIdAsync(ulong chatId, CancellationToken cancellationToken = default)
     {
-        Response<Chat> response = await httpClient
-            .GetAsync<Chat>(CombinePath(chatId.ToString()), cancellationToken);
+        HttpResponseMessage httpResponse = await httpClient
+            .GetAsync(CombinePath($"chats/{chatId}"), cancellationToken);
+
+        Response<Chat> response = await httpResponse.ToResponse<Chat>(cancellationToken);
         
-        logger.LogResponse(response, "GET", "get chat by id");
-        return response;
+        logger.LogResponse(response, nameof(GetChatByIdAsync));
+        return response.Content;
     }
 
     private string CombinePath(string relativeApiPath)
     {
-        return Path.Combine(configuration.DomainName, relativeApiPath);
+        return configuration.Protocol + Path.Combine(configuration.DomainName, relativeApiPath);
     }
 }

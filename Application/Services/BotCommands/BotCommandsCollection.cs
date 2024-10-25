@@ -11,11 +11,14 @@ using Application.Services.BotCommands.Settings;
 
 namespace Application.Services.BotCommands;
 
-public class BotCommandsCollection : IEnumerable<IBotCommand> {
+public class BotCommandsCollection : IEnumerable<IBotCommand> 
+{
     private readonly IEnumerable<IBotCommand> _botCommands;
 
-    public BotCommandsCollection(IServiceProvider serviceProvider) {
-        _botCommands = new IBotCommand[] {
+    public BotCommandsCollection(IServiceProvider serviceProvider) 
+    {
+        _botCommands = new IBotCommand[] 
+        {
             new HelpBotCommand(this),
             new InfoBotCommand(),
             new SettingsBotCommand(
@@ -23,7 +26,8 @@ public class BotCommandsCollection : IEnumerable<IBotCommand> {
         };
     }
 
-    public IEnumerator<IBotCommand> GetEnumerator() {
+    public IEnumerator<IBotCommand> GetEnumerator()
+    {
         foreach (IBotCommand botCommand in _botCommands)
             yield return botCommand;
     }

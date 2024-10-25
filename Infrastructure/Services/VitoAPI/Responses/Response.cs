@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace Domain.VitoAPI;
+namespace Infrastructure.Services.VitoAPI.Responses;
 
 /// <summary>
 /// An instance of API response
@@ -10,6 +10,8 @@ public class Response
     public bool IsSuccess { get; init; }
 
     public HttpStatusCode StatusCode { get; init; }
+    
+    public ProblemDetails? Problem { get; set; }
 }
 
 /// <summary>

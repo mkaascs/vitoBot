@@ -1,9 +1,11 @@
+using Microsoft.Extensions.Logging;
+
 using Domain.Abstractions;
 using Domain.VitoAPI;
 
 using Infrastructure.Configuration;
 using Infrastructure.Services.VitoAPI.Extensions;
-using Microsoft.Extensions.Logging;
+using Infrastructure.Services.VitoAPI.Responses;
 
 namespace Infrastructure.Services.VitoAPI;
 
@@ -15,44 +17,52 @@ namespace Infrastructure.Services.VitoAPI;
 public class MessageService(
     HttpClient httpClient,
     VitoApiConfiguration configuration,
-    ILogger<MessageService> logger) : IMessageApiService {
-
-    public async Task<Response> AddNewMessageAsync(
+    ILogger<MessageService> logger) : IMessageApiService 
+{
+    public async ValueTask<bool> AddNewMessageAsync(
         ulong chatId,
         Message message,
         CancellationToken cancellationToken = default)
     {
-        Response response = await httpClient
-            .PostAsync(message, CombinePath($"chats/{chatId}"), cancellationToken);
+        HttpResponseMessage httpResponse = await httpClient
+            .PostAsync(message, CombinePath($"chats/{chatId}/messages"), cancellationToken);
+
+        Response response = await httpResponse.ToResponse(cancellationToken);
+        logger.LogResponse(response, nameof(AddNewMessageAsync));
         
-        logger.LogResponse(response, "POST", "add new message");
-        return response;
+        return response.IsSuccess;
     }
 
-    public async Task<Response<IEnumerable<Message>>> GetMessagesAsync(
+    public async ValueTask<IEnumerable<Message>?> GetMessagesAsync(
         ulong chatId,
         CancellationToken cancellationToken = default)
     {
-        Response<IEnumerable<Message>> response = await httpClient
-            .GetAsync<IEnumerable<Message>>(CombinePath($"chats/{chatId}"), cancellationToken);
+        HttpResponseMessage httpResponse = await httpClient
+            .GetAsync(CombinePath($"chats/{chatId}/messages"), cancellationToken);
+
+        Response<IEnumerable<Message>> response = await httpResponse
+            .ToResponse<IEnumerable<Message>>(cancellationToken);
         
-        logger.LogResponse(response, "GET", "get all messages from chat");
-        return response;
+        logger.LogResponse(response, nameof(GetMessagesAsync));
+        
+        return response.Content;
     }
 
-    public async Task<Response<Message>> GetRandomMessageAsync(
+    public async ValueTask<Message?> GetRandomMessageAsync(
         ulong chatId,
         CancellationToken cancellationToken = default)
     {
-        Response<Message> response = await httpClient
-            .GetAsync<Message>(CombinePath($"chats/{chatId}/random"), cancellationToken);
+        HttpResponseMessage httpResponse = await httpClient
+            .GetAsync(CombinePath($"chats/{chatId}/messages/random"), cancellationToken);
+
+        Response<Message> response = await httpResponse.ToResponse<Message>(cancellationToken);
+        logger.LogResponse(response, nameof(GetRandomMessageAsync));
         
-        logger.LogResponse(response, "GET", "get random message from chat");
-        return response;
+        return response.Content;
     }
     
     private string CombinePath(string relativeApiPath)
     {
-        return Path.Combine(configuration.DomainName, relativeApiPath);
+        return configuration.Protocol + Path.Combine(configuration.DomainName, relativeApiPath);
     }
 }

@@ -11,7 +11,8 @@ using Application.DTO.Commands;
 namespace Application.Services.BotCommands.Settings;
 
 [BotCommand(CommandName = "settings", Description = "Позволяет настроить логику бота")]
-public class SettingsBotCommand : IBotCommand {
+public class SettingsBotCommand : IBotCommand 
+{
     #region Chance merge
 
     private readonly List<Action<decimal, UserSettings>> _mergedChances = [
@@ -67,7 +68,8 @@ public class SettingsBotCommand : IBotCommand {
             cancellationToken);
     }
 
-    private async Task DisplayUserSettingsAsync(IBotCommandHandlingContext context, UserSettings userSettings, CancellationToken cancellationToken = default) {
+    private async Task DisplayUserSettingsAsync(IBotCommandHandlingContext context, UserSettings userSettings, CancellationToken cancellationToken = default)
+    {
         string content = $"ℹ\ufe0f Действующие настройки VitoBot:\n\n" +
                          $"1) Стандартный шанс отправить сообщение - {userSettings.DefaultChanceToSendMessage:0.######}\n" +
                          $"2) Шанс сохранить текстовое сообщение - {userSettings.ChanceToSaveTextMessage:0.######}\n" +

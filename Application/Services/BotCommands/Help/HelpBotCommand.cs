@@ -8,8 +8,10 @@ using Application.Abstractions.BotCommands;
 namespace Application.Services.BotCommands.Help;
 
 [BotCommand(CommandName = "help", Description = "Выводит все существующие команды бота")]
-public class HelpBotCommand(BotCommandsCollection commandsCollection) : IBotCommand {
-    public async Task CallAsync(IBotCommandHandlingContext context, CancellationToken cancellationToken = default) {
+public class HelpBotCommand(BotCommandsCollection commandsCollection) : IBotCommand
+{
+    public async Task CallAsync(IBotCommandHandlingContext context, CancellationToken cancellationToken = default)
+    {
         string content = commandsCollection
             .Select(command => command.GetType()
                 .GetCustomAttribute<BotCommandAttribute>())

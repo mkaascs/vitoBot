@@ -11,7 +11,6 @@ public class MessageHandler(
     MessageBotLogic botLogic,
     ILogger<MessageHandler> logger) : IMessageHandler
 {
-    
     public async Task OnGetMessageAsync(
         IMessageHandlingContext context,
         CancellationToken cancellationToken = default)
