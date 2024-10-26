@@ -43,7 +43,7 @@ public class MessageReplyingLogic(IMessageApiService messageApiService)
         if (answers.Count > 0)
             return answers.Select(answer => new SendMessageCommand(answer.Content, answer.Type));
 
-        ChatsWaitingOnResponse.TryAdd(receivedMessage.Chat.Id, 1);
+        ChatsWaitingOnResponse.TryAdd(receivedMessage.Chat.Id, 0);
         ChatsWaitingOnResponse[receivedMessage.Chat.Id]++;
         return [];
     }
