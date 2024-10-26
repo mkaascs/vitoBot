@@ -4,13 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Domain.Abstractions;
 
-using Application.Abstractions;
-
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Repositories;
 using Infrastructure.Services.TelegramAPI;
-using Infrastructure.Services.TelegramAPI.Application;
 using Infrastructure.Services.VitoAPI;
 
 namespace Core.Extensions;

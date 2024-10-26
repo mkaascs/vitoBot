@@ -1,29 +1,32 @@
+using Microsoft.Extensions.Logging;
+
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 
 using Infrastructure.Configuration;
 using Infrastructure.Services.TelegramAPI.Application;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services.TelegramAPI;
 
-public class BotClient {
-    public BotClient(TelegramApiConfiguration configuration, ILogger<BotClient> logger) {
+public class BotClient
+{
+    private readonly TelegramBotClient _botClient;
+
+    public BotClient(TelegramApiConfiguration configuration, ILogger<BotClient> logger) 
+    {
         ArgumentNullException.ThrowIfNull(configuration);
 
-        Bot = new TelegramBotClient(configuration.ApiKey);
-        MessageSender = new TelegramBotMessageSender(this, logger);
-        UpdateHandler = new TelegramBotUpdateHandler(MessageSender, logger);
+        _botClient = new TelegramBotClient(configuration.ApiKey);
+        TelegramBotMessageSender messageSender = new(_botClient, logger);
+        
+        UpdateHandler = new TelegramBotUpdateHandler(messageSender, logger);
     }
     
-    public TelegramBotClient Bot { get; }
-    
     public TelegramBotUpdateHandler UpdateHandler { get; }
-
-    public TelegramBotMessageSender MessageSender { get; }
     
-    public void StartReceiving() {
-        Bot.StartReceiving(UpdateHandler,
+    public void StartReceiving() 
+    {
+        _botClient.StartReceiving(UpdateHandler,
             new ReceiverOptions {
                 ThrowPendingUpdates = true });
     }

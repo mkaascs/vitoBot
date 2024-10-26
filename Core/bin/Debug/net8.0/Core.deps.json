@@ -952,6 +952,7 @@
       },
       "Domain/1.0.0": {
         "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.2",
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {

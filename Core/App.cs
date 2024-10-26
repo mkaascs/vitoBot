@@ -1,6 +1,8 @@
 using Application.Abstractions;
 
 using Infrastructure.Services.TelegramAPI;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
 
 namespace Core;
 

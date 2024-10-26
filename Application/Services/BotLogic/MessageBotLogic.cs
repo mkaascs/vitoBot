@@ -3,6 +3,7 @@ using Domain.Entities;
 
 using Application.DTO;
 using Application.DTO.Commands;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.BotLogic;
 
@@ -11,16 +12,20 @@ public class MessageBotLogic(
     MessageReplyingLogic replyingLogic,
     IUserSettingsRepository userSettingsRepository)
 {
-    public async Task<IEnumerable<SendMessageCommand>> GetReplyAsync(MessageDto receivedMessage, CancellationToken cancellationToken = default) 
+    public async Task<IEnumerable<SendMessageCommand>> GetReplyAsync(
+        MessageDto receivedMessage,
+        CancellationToken cancellationToken = default)
     {
-        UserSettings currentUserSettings = await userSettingsRepository
-            .GetUserSettingsByChatIdAsync(receivedMessage.Chat.Id, cancellationToken);
+        UserSettings userSettingsInChat = await userSettingsRepository.Entities
+            .Where(userSettings => userSettings.ChatId.Equals(receivedMessage.Chat.Id))
+            .FirstOrDefaultAsync(cancellationToken)
+            ?? userSettingsRepository.GetDefaultUserSettings();
 
         Task savingMessage = savingLogic
-            .TryRememberMessageAsync(receivedMessage, currentUserSettings, cancellationToken);
+            .TryRememberMessageAsync(receivedMessage, userSettingsInChat, cancellationToken);
         
         Task<IEnumerable<SendMessageCommand>> replyingMessage = replyingLogic
-            .GetAnswerAsync(receivedMessage, currentUserSettings, cancellationToken);
+            .GetAnswerAsync(receivedMessage, userSettingsInChat, cancellationToken);
 
         await Task.WhenAll(savingMessage, replyingMessage);
 

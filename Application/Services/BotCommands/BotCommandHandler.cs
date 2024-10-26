@@ -10,7 +10,9 @@ namespace Application.Services.BotCommands;
 
 public class BotCommandHandler(BotCommandsCollection commandsCollection) : IMessageHandler
 {
-    public async Task OnGetMessageAsync(IMessageHandlingContext context, CancellationToken cancellationToken = default)
+    public async Task OnGetMessageAsync(
+        IMessageHandlingContext context, 
+        CancellationToken cancellationToken = default)
     {
         if (context is not IBotCommandHandlingContext botCommandContext)
             return;

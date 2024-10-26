@@ -17,6 +17,8 @@ internal sealed class Startup {
         services.AddRepositories(configuration);
         
         services.AddMessageHandlers();
+
+        services.AddBotCommandHandlers();
         
         return services;
     }

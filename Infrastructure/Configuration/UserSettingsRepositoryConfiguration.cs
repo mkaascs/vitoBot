@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Configuration;
 
-public class UserSettingsRepositoryConfiguration(IConfiguration configuration) {
+public class UserSettingsRepositoryConfiguration(IConfiguration configuration)
+{
     public UserSettings DefaultUserSettings { get; } = configuration
                                                            .GetSection("DefaultUserSettings")
                                                            .Get<UserSettings>()

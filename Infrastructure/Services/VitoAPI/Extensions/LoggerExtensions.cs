@@ -14,6 +14,6 @@ internal static class LoggerExtensions
         if (response.IsSuccess)
             logger.LogInformation(log);
         
-        else logger.LogError(log + $": {response.Problem?.Title}");
+        else logger.LogWarning(log + $": {response.Problem?.Title}");
     }
 }

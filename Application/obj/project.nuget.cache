@@ -1,10 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "gwcYzZHHycEZVY1+QzVj1tiETTMSQJjDAN9g+NBKGwoyP3B4ybfwAM2wrIbhMEYz1ugCTk7/aXce2/LZlhRkEw==",
+  "dgSpecHash": "xPKG8hbYgybdbiPFOqmG0MVgXJwA/92hAno/iVDcKw4jn5heh4TU/z33asPjW8RSe0bpCYnRDvoUHIA+3cvYLg==",
   "success": true,
   "projectFilePath": "/Users/makaasz/Проекты/vitoBot/VitoBot/Application/Application.csproj",
   "expectedPackageFiles": [
     "/Users/makaasz/.nuget/packages/fluentvalidation/11.10.0/fluentvalidation.11.10.0.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.entityframeworkcore/8.0.2/microsoft.entityframeworkcore.8.0.2.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.2/microsoft.entityframeworkcore.abstractions.8.0.2.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.entityframeworkcore.analyzers/8.0.2/microsoft.entityframeworkcore.analyzers.8.0.2.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.caching.abstractions/8.0.0/microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
+    "/Users/makaasz/.nuget/packages/microsoft.extensions.caching.memory/8.0.0/microsoft.extensions.caching.memory.8.0.0.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.1/microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.2/microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
     "/Users/makaasz/.nuget/packages/microsoft.extensions.logging/8.0.1/microsoft.extensions.logging.8.0.1.nupkg.sha512",

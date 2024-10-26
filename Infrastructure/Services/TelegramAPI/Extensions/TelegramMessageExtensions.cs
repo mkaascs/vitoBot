@@ -7,9 +7,11 @@ using ContentType = Domain.VitoAPI.ContentType;
 
 namespace Infrastructure.Services.TelegramAPI.Extensions;
 
-internal static class TelegramMessageExtensions {
-    public static MessageDto ToDto(this Message message) {
-        message.GetContent(out ContentType messageType, out string? messageContent);
+internal static class TelegramMessageExtensions
+{
+    public static MessageDto ToDto(this Message message)
+    {
+        message.GetContent(out string? messageContent, out ContentType messageType);
         return new MessageDto(
             message.MessageId,
             message.From.ToDto(),
@@ -18,14 +20,19 @@ internal static class TelegramMessageExtensions {
             messageType,
             messageContent);
     }
-    
+
     private static ChatDto ToDto(this Chat chat)
-        => new((ulong)chat.Id, chat.Title);
+    {
+        return new ChatDto((ulong)chat.Id, chat.Title);
+    }
 
     private static UserDto? ToDto(this User? user)
-        => user is null ? null : new UserDto((ulong)user.Id, user.FirstName);
+    {
+        return user is null ? null : new UserDto((ulong)user.Id, user.FirstName);
+    }
 
-    private static void GetContent(this Message message, out ContentType type, out string? content) {
+    private static void GetContent(this Message message, out string? content, out ContentType type) 
+    {
         content = null;
         type = ContentType.Text;
         
