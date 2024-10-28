@@ -14,8 +14,8 @@ public class TelegramBotCommandHandlingContext
         TelegramBotMessageSender messageSender)
         : base(message, userContext, messageSender)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(fullCommand);
-
+        ArgumentNullException.ThrowIfNull(message);
+        
         string[] splitCommand = fullCommand.Split(' ');
         CommandName = splitCommand[0];
         Arguments = splitCommand.Skip(1).ToArray();
